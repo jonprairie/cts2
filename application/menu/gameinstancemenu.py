@@ -97,7 +97,15 @@ class gameinstancemenu:
         self.event_handler.ProcessEvent(self.display_string_table)
 
     def DisplayTournament(self, t):
-        self.display_string.st = t
+        self.display_string.st = "\n".join(
+            [
+                "tournament: " + t.name,
+                "starts: " + str(t.start_julian_date),
+                "player list:\n" + "\n".join(
+                    [str(p) for p in t.player_list]
+                )
+            ]
+        )
         self.event_handler.ProcessEvent(self.display_string)
 
     def Calendar(self):

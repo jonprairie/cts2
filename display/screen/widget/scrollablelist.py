@@ -27,7 +27,7 @@ class scrollablelist(widget.widget):
             return False
 
     def GetCurrentPage(self):
-        return self.GetPage(self.line_index)
+        return self.GetPageObj(self.line_index)
 
     def GetPage(self, line_num):
         self.line_index = line_num
@@ -43,6 +43,19 @@ class scrollablelist(widget.widget):
                     self.line_index:
                     self.line_index + self.page_size
                 ]
+            ]
+        return ret_list
+
+    def GetPageObj(self, line_num):
+        self.line_index = line_num
+        if self.IsLastPage():
+            ret_list = self.disp_list[
+                self.line_index:
+            ]
+        else:
+            ret_list = self.disp_list[
+                self.line_index:
+                self.line_index + self.page_size
             ]
         return ret_list
 
