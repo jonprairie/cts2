@@ -83,11 +83,21 @@ class tournamenthandler(
                     t.CancelTournament()
             if t.started and not t.schedule_finished:
                 t.BuildSchedule()
-                self.LogMessage(" schedule built: \n" + "\n".join(str(r) for r in t.schedule))
+                self.LogMessage(
+                    " schedule built: \n" + "\n".join(
+                        str(r) for r in t.schedule
+                    )
+                )
             if t.started and not t.finished:
                 t.PlayRound()
-                self.LogMessage(" simulated round: \n" + "\n".join(str(r) for r in t.schedule))
-            if not t.started and not t.cancel and int(date) > int(t.start_julian_date):
+                self.LogMessage(
+                    " simulated round: \n" + "\n".join(
+                        str(r) for r in t.schedule
+                    )
+                )
+            if not t.started and not t.cancel and (
+                int(date) > int(t.start_julian_date)
+            ):
                 self.LogMessage(
                     str(t) + " error, start date is " +
                     str(t.start_julian_date) +

@@ -1,5 +1,6 @@
 import cts2.application.util.row as row
 
+
 class tournament(row.row):
     def __init__(
         self,
@@ -8,13 +9,14 @@ class tournament(row.row):
         num_player_range
     ):
 
-        #tournament variables
+        # tournament variables
         self.name = name
         self.start_julian_date = start_julian_date
         self.num_player_range = num_player_range
         self.player_list = []
+        self.date_range = []
 
-        #state variables
+        # state variables
         self.started = False
         self.finished = False
         self.cancel = False
@@ -34,11 +36,22 @@ class tournament(row.row):
     def RowStr(self):
         return "tournament." + self.name
 
-
     def AddPlayer(self, p):
         if p not in self.player_list:
             self.player_list.append(p)
-        self.UpdateRow("players",len(self.player_list))
+        self.UpdateRow("players", len(self.player_list))
+
+    def SetDateRange(self, date_range):
+        self.date_range = date_range
+
+    def GetDateRange(self):
+        return self.date_range
+
+    def Conflicts(self, t):
+        if (set(self.GetDateRange()) & set(t.GetDateRange())):
+            return True
+        else:
+            return False
 
     def CancelTournament(self):
         self.cancel = True

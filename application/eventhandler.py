@@ -44,40 +44,44 @@ class eventhandler:
             self.LinkEventHandler(h)
 
         # create the mapping from events to event processors
-        self.event_registry.update(dict(
-            get_exit="exit_handler",
-            make_exit="exit_handler",
-            menu_frame="menu_handler",
-            init_game_instance_handlers="event_handler",
-            create_tournament="tournament_handler",
-            create_random_tournament="tournament_handler",
-            add_tournament_to_waiting_list="tournament_handler",
-            add_tournament_to_new_list="tournament_handler",
-            get_non_started_tournament_list="tournament_handler",
-            get_current_tournament_list="tournament_handler",
-            # simulate_game="game_sim_handler",
-            # build_schedule="schedule_handler",
-            get_date_from_julian_offset="calendar_handler",
-            register_for_maintenance="calendar_handler",
-            advance_day="calendar_handler",
-            get_date_list_from_julian_offset_list="dummy",
-            display_string_table="display_handler",
-            display_input_message="display_handler",
-            display_yes_or_no_message="display_handler",
-            display_screen="display_handler",
-            display_string="display_handler",
-            read_sysin="input_handler",
-            create_player="create_player_handler",
-            create_player_list="create_player_handler",
-            get_player_list="player_handler",
-            log_message="log_handler"
-        ))
+        self.event_registry.update(
+            dict(
+                get_exit="exit_handler",
+                make_exit="exit_handler",
+                menu_frame="menu_handler",
+                init_game_instance_handlers="event_handler",
+                create_tournament="tournament_handler",
+                create_random_tournament="tournament_handler",
+                add_tournament_to_waiting_list="tournament_handler",
+                add_tournament_to_new_list="tournament_handler",
+                get_non_started_tournament_list="tournament_handler",
+                get_current_tournament_list="tournament_handler",
+                # simulate_game="game_sim_handler",
+                # build_schedule="schedule_handler",
+                get_date_from_julian_offset="calendar_handler",
+                register_for_maintenance="calendar_handler",
+                advance_day="calendar_handler",
+                get_date_list_from_julian_offset_list="dummy",
+                display_string_table="display_handler",
+                display_input_message="display_handler",
+                display_yes_or_no_message="display_handler",
+                display_screen="display_handler",
+                display_string="display_handler",
+                read_sysin="input_handler",
+                create_player="create_player_handler",
+                create_player_list="create_player_handler",
+                get_player_list="player_handler",
+                log_message="log_handler"
+            )
+        )
 
     def InitGameInstanceHandlers(self):
         # Update create_player_handler first so other modules can create
         # players on __init__
         self.handler_registry.update(
-            create_player_handler=createplayerhandler.createplayerhandler(self),
+            create_player_handler=createplayerhandler.createplayerhandler(
+                self
+            ),
             calendar_handler=calendarhandler.calendarhandler(self)
         )
         self.handler_registry.update(

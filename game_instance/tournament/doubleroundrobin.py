@@ -2,6 +2,7 @@ import cts2.game_instance.tournament.tround as tround
 import cts2.application.util.stringtable as stringtable
 import random
 
+
 class doubleroundrobin:
     def __init__(self):
         self.schedule_finished = False
@@ -44,7 +45,7 @@ class doubleroundrobin:
         """
 
         num_byes = 0
-        odd = num_players%2
+        odd = num_players % 2
         player_list = range(num_players)
 
         if odd:
@@ -52,7 +53,7 @@ class doubleroundrobin:
         else:
             num_byes = 2
 
-        fixed=[0]
+        fixed = [0]
         top = range(
             1,
             num_players//2-(abs(odd-1))
@@ -72,17 +73,17 @@ class doubleroundrobin:
                 t_top = fixed[:]
                 t_top.extend(top)
                 round_pairings = [
-                    (t_top[i],bottom[i]) for i in range(len(bottom))
+                    (t_top[i], bottom[i]) for i in range(len(bottom))
                 ]
             else:
                 t_top = fixed[:]
                 t_top.extend(top)
                 round_pairings = [
-                    (bottom[i],t_top[i]) for i in range(len(bottom))
+                    (bottom[i], t_top[i]) for i in range(len(bottom))
                 ]
 
             full_pairings.append(round_pairings)
-            top.insert(0,bottom[0])
+            top.insert(0, bottom[0])
             bottom.append(top[num_players//2])
             top.remove(top[num_players//2])
             bottom.remove(bottom[0])
