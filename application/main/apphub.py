@@ -3,14 +3,18 @@ import api
 
 
 class apphub:
-    def __init__(self):
+    def __init__(self, application_package_addresses):
         '''app container, loads packages/modules,
-        builds the api, activates the packages/modules, and runs
-        the game loop'''
-        self.app_api = api.api(self.LoadPackages())
-        self.LoadApplicationPackages()
+        builds the api, resolves dependencies and activates
+        the packages/modules'''
+        self.app_api = api.api(
+            self.LoadApplicationPackages(
+                application_package_addresses
+            )
+        )
+        self.ActivateApplicationPackages()
 
-    def LoadPackages(self):
+    def LoadApplicationPackages(self, app_pkg_addressess):
         '''To add a package, insert an entry into this list. The
         entry should be the python path to the class that exposes
         that package's api. The __init__ method of this class
@@ -22,10 +26,7 @@ class apphub:
         loader will then call the Activate method on that class later
         to allow any necessary, external api calls.'''
         ret_dict = dict()
-        self.package_addresses = [
-            "cts2.display.displayhandler.displayhandler"
-        ]
-        for p in self.package_addresses:
+        for p in app_pkg_addressess:
             handler = self.InitPackage(p)
             ret_dict.update(
                 dict(
@@ -35,9 +36,15 @@ class apphub:
         return ret_dict
 
     def InitPackage(self, pkg):
-        return locate(pkg)()
+        print "loading: " + pkg
+        try:
+            p = locate(pkg)()
+        except:
+            raise
+        print "loaded:  " + pkg
+        return p
 
-    def LoadApplicationPackages(self):
+    def ActivateApplicationPackages(self):
         pass
 
     def GameLoop(self):
