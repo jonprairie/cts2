@@ -1,14 +1,21 @@
 import cts2.application.events.messageevent as messageevent
+import cts2.application.util.pkg as pkg
 import os
 
 
-class displayhandler:
+class displayhandler(pkg.pkg):
     # TODO: implement eventprocessor
-    def __init__(self):
+    def __init__(self, api):
         self.read_sysin_ev = messageevent.messageevent(
             "read_sysin"
         )
-        self.expose = ["display_screen"]
+        pkg.pkg.__init__(
+            self,
+            api,
+            "display_handler",
+            ["display_screen"],
+            []
+        )
 
     def ProcessEvent(self, ev):
         if ev.event_type == "display_screen":

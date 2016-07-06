@@ -1,6 +1,7 @@
 import optionconsumer
 import logger
 
+
 class eventprocessor(
     optionconsumer.optionconsumer,
     logger.logger
@@ -17,4 +18,4 @@ class eventprocessor(
             self.event_dict[ev.event_type](ev)
         except:
             raise
-            #raise Exception(ev.event_type + " is not a valid Event Type for " + str(self))
+            # raise Exception(ev.event_type + " is not a valid Event Type for " + str(self))
