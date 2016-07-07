@@ -12,5 +12,5 @@ class inputhandler(pkg.pkg):
             ["log_msg"]
         )
 
-    def ReadSysin(self, ev):
-        ev.input = raw_input("\n--> ")
+    def ReadSysin(self, cursor="\n--> "):
+        ev.input = raw_input(cursor)

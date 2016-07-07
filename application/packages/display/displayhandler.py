@@ -13,9 +13,15 @@ class displayhandler(pkg.pkg):
             self,
             api,
             "display_handler",
-            ["display_screen"],
-            []
+            [
+                "add_screen",
+                "pop_screen",
+                "display",
+                "display_input_message"
+            ],
+            ["log_msg"]
         )
+        self.screen_stack = []
 
     def ProcessEvent(self, ev):
         if ev.event_type == "display_screen":
@@ -41,6 +47,17 @@ class displayhandler(pkg.pkg):
         elif ev.event_type == "display_string":
             self.DisplayString(ev.st)
 
+    def AddScreen(self, screen):
+        self.screen_stack.append(screen)
+
+    def PopScreen(self):
+        self.screen_stack.pop()
+
+    def Display(self):
+        self.DisplayScreen(
+            self.screen_stack[-1]
+        )
+
     def DisplayScreen(
         self,
         screen
@@ -51,8 +68,10 @@ class displayhandler(pkg.pkg):
             pause=screen.display_only
         )
         while not screen.display_only and not screen.exit:
-            self.event_handler.ProcessEvent(self.read_sysin_ev)
-            screen.PassInput(self.read_sysin_ev.input)
+            # self.event_handler.ProcessEvent(self.read_sysin_ev)
+            inp = self.api.Call("read_sysin")
+            screen.PassInput(inp)
+            # screen.PassInput(self.read_sysin_ev.input)
             self.DisplayString(
                 str(screen),
                 header=screen.name,

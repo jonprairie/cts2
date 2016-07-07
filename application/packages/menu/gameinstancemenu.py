@@ -1,10 +1,10 @@
-import util.stringtable as stringtable
-import event
-import cts2.application.events.getplayerlist as getplayerlist
-import cts2.application.events.messageevent as messageevent
-import menu.arch.node as node
-import menu.arch.menudriver as menudriver
-import cts2.display.screen.menuscreen as menuscreen
+import cts2.application.util.stringtable as stringtable
+# import event
+# import cts2.application.events.getplayerlist as getplayerlist
+# import cts2.application.events.messageevent as messageevent
+import cts2.application.packages.menu.arch.node as node
+import cts2.application.packages.menu.arch.menudriver as menudriver
+import cts2.application.packages.display.screen.menuscreen as menuscreen
 
 
 class gameinstancemenu:

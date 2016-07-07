@@ -44,7 +44,7 @@ class pkgactivatorhandler(pkg.pkg):
                     self.dep_web[d] for d in pkg.dependencies
                 ]:
                     self.ActivatePkg(p, ancestors)
-                print "activating: ", pkg
+                print "activating: ", pkg.name
                 pkg.Activate()
                 self.activated_ledger[pkg.name] = True
                 ancestors.remove(pkg)

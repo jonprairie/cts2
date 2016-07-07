@@ -20,8 +20,5 @@ class apphub:
             self.app_api.GetPackages()
         )
 
-    # def ActivateApplicationPackages(self):
-    #     pass
-
     def GameLoop(self):
         raise Exception('exit')

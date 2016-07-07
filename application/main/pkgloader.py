@@ -9,10 +9,9 @@ def LoadApplicationPackages(api, app_pkg_addressess):
 
 
 def LoadPackage(api, pkg):
-    print "loading: " + pkg
-    handler = InitPackage(api, pkg)
     l = pkg.split(".")
-    print "  " + pkg.split(".")[len(l)-1] + " exposes:"
+    print "loading: " + pkg.split(".")[len(l)-1] + ", exposing:"
+    handler = InitPackage(api, pkg)
     ret_dict = dict()
     for c in handler.expose:
         print "    " + c
@@ -25,7 +24,4 @@ def LoadPackage(api, pkg):
 
 
 def InitPackage(api, pkg):
-    try:
-        return locate(pkg)(api)
-    except:
-        raise
+    return locate(pkg)(api)
