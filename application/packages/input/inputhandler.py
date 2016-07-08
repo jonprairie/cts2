@@ -13,4 +13,4 @@ class inputhandler(pkg.pkg):
         )
 
     def ReadSysin(self, cursor="\n--> "):
-        ev.input = raw_input(cursor)
+        return raw_input(cursor)

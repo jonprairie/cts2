@@ -1,15 +1,20 @@
 class screen:
-    def __init__(self, widgets, key_dict):
+    def __init__(self, key_dict, header=""):
         '''TODO: add support for multiple widgets'''
-        self.widgets = widgets
-        self.focus_index = 0
         self.key_dict = key_dict
-        self.display_only = False
+        self.exit = False
 
     def PassInput(self, input):
         if input in self.key_dict.keys():
             self.key_dict[input]()
         else:
-            self.widgets[
-                self.focus_index
-            ].PassInput(input)
+            pass
+
+    def MakeExit(self):
+        self.exit = True
+
+    def GetExit(self):
+        return self.exit
+
+    def __str__(self):
+        return header or str(self)

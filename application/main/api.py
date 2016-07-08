@@ -27,14 +27,15 @@ class api:
             f = eval("module." + func_name)
             ret_value = f(*args, **kwargs)
         except Exception as e:
-            print "API Error:"
-            print "  api function:", func_name, api_call
-            print "  args:", args
-            print "  kwargs:", kwargs
-            print "-"*60
-            print "  api traceback:"
-            traceback.print_exc()
-            print "-"*60
+            if e.message != "exit":
+                print "API Error:"
+                print "  api function:", func_name, api_call
+                print "  args:", args
+                print "  kwargs:", kwargs
+                print "-"*60
+                print "  api traceback:"
+                traceback.print_exc()
+                print "-"*60
             raise Exception('exit')
 
         return ret_value

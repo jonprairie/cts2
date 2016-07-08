@@ -17,7 +17,7 @@ class displayhandler(pkg.pkg):
                 "add_screen",
                 "pop_screen",
                 "display",
-                "display_input_message"
+                "get_top_screen"
             ],
             ["log_msg"]
         )
@@ -30,7 +30,7 @@ class displayhandler(pkg.pkg):
             response = self.GetYesOrNo(ev.message)
             ev.response = response
         elif ev.event_type == "display_input_message":
-            response = self.GetInput(
+            response = self.DisplayInputMessage(
                 ev.msg,
                 header=ev.header,
                 pre_clear=ev.pre_clear
@@ -53,7 +53,16 @@ class displayhandler(pkg.pkg):
     def PopScreen(self):
         self.screen_stack.pop()
 
+    def GetTopScreen(self):
+        return self.screen_stack[-1]
+
     def Display(self):
+        '''filter exited screens from display stack, then
+        display top screen'''
+        self.screen_stack = filter(
+            lambda x: not x.GetExit(),
+            self.screen_stack
+        )
         self.DisplayScreen(
             self.screen_stack[-1]
         )
@@ -64,19 +73,8 @@ class displayhandler(pkg.pkg):
     ):
         self.DisplayString(
             str(screen),
-            header=screen.name,
-            pause=screen.display_only
+            pause=False
         )
-        while not screen.display_only and not screen.exit:
-            # self.event_handler.ProcessEvent(self.read_sysin_ev)
-            inp = self.api.Call("read_sysin")
-            screen.PassInput(inp)
-            # screen.PassInput(self.read_sysin_ev.input)
-            self.DisplayString(
-                str(screen),
-                header=screen.name,
-                pause=screen.display_only
-            )
 
     def DisplayStringTable(
         self,
@@ -102,7 +100,7 @@ class displayhandler(pkg.pkg):
         if pause:
             os.system("PAUSE")
 
-    def GetInput(self, msg, header="", pre_clear=True):
+    def DisplayInputMessage(self, msg, header="", pre_clear=True):
         self.DisplayString(
             msg,
             header=header,
@@ -114,7 +112,7 @@ class displayhandler(pkg.pkg):
     def GetYesOrNo(self, msg):
         inp = ""
         while inp not in ["yes", "y", "no", "n"]:
-            inp = self.GetInput(msg)
+            inp = self.DisplayInputMessage(msg)
         if inp[0] == "y":
             inp = "yes"
         else:
