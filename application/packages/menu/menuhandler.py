@@ -25,14 +25,14 @@ class menuhandler(pkg.pkg):
 
     def BuildMainMenu(self):
         temp_scr = dms.dynamicmenuscreen(
-            "Chess Tournament Sim",
+            "Chess Tournament Sim - Main Menu",
             dict([
                 ("new game", self.NewGame),
                 ("load game", self.LoadGame),
                 ("exit", self.MakeExit)
-            ])
+            ]),
+            add_exit=False
         )
-        # override menu screen's default exit method
         return temp_scr
 
     def MakeExit(self):

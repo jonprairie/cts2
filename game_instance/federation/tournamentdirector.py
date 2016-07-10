@@ -8,7 +8,7 @@ class tournamentdirector(maintenancesubscriber.maintenancesubscriber):
         maintenancesubscriber.maintenancesubscriber.__init__(
             self, False, True, False, False
         )
-        self.start_julian_date = random.randint(1,365)
+        self.start_julian_date = random.randint(1, 365)
         self.create_tourn_event = messageevent.messageevent(
             "create_tournament"
         )

@@ -1,18 +1,21 @@
-from pydoc import locate
-import pkgloader
+import cts2.application.packages.pkgloader.pkgloaderhandler as pl
 import api
 
 
 class apphub:
-    def __init__(self, app_pkg_addr):
+    def __init__(self, pkg_addr):
         '''app container, loads packages/modules,
         builds the api, resolves dependencies and activates
         the packages/modules'''
         self.app_api = api.api()
+
+        # creates a pkgloader instance to load the initial packages.
+        # this instance will load another instance into the api in
+        # order to expose package-loading functionality.
+        pkgl = pl.pkgloaderhandler(self.app_api)
         self.app_api.Update(
-            pkgloader.LoadApplicationPackages(
-                self.app_api,
-                app_pkg_addr
+            pkgl.LoadPackages(
+                pkg_addr
             )
         )
         self.app_api.Call(

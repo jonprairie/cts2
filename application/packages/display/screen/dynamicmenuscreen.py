@@ -11,15 +11,17 @@ class dynamicmenuscreen:
         self,
         name,
         menu_dict,
-        page_sz=10
+        page_sz=10,
+        add_exit=True
     ):
         self.menu_dict = menu_dict
         disp_list = [k for k in self.menu_dict.keys()]
         key_dict = dict(
             e=self.PageUp,
-            d=self.PageDown,
-            x=self.Exit
+            d=self.PageDown
         )
+        if add_exit:
+            key_dict.update((x, self.Exit))
         self.list_widget = scrollablelist.scrollablelist(
             disp_list,
             key_dict,

@@ -1,15 +1,13 @@
 import cts2.application.util.stringtable as stringtable
-# import event
-# import cts2.application.events.getplayerlist as getplayerlist
-# import cts2.application.events.messageevent as messageevent
 import cts2.application.packages.menu.arch.node as node
 import cts2.application.packages.menu.arch.menudriver as menudriver
-import cts2.application.packages.display.screen.menuscreen as menuscreen
+import cts2.application.packages.display.screen.dynamicmenuscreen as dms
 
 
 class gameinstancemenu:
-    def __init__(self):
-        self.BuildMenu()
+    def __init__(self, api):
+        self.menu_screen, self.tourn_scr = self.BuildMenu()
+        self.api = api
 
         self.exit_question = event.displayyesornomessage(
             "Are you sure that you want to exit?"
@@ -41,18 +39,28 @@ class gameinstancemenu:
         self.exit = False
 
     def BuildMenu(self):
-        en1 = node.exteriornode("exit", self.MakeExit)
-        en2 = node.exteriornode("advance day", self.AdvanceDay)
-        en3 = node.exteriornode("calendar", self.Calendar)
-        en4 = node.exteriornode("top players", self.TopPlayers)
-        en5 = node.exteriornode("current tournaments", self.CurrentTournaments)
-        en6 = node.exteriornode("future tournaments", self.FutureTournaments)
-        in1 = node.interiornode("tournaments", [en5, en6])
-        menu_list = [en1, en2, en3, en4, in1]
-        self.menu_driver = menudriver.menudriver(
-            "Chess Tournament Sim",
-            menu_list
+        temp_scr = dms.dynamicmenuscreen(
+            "Chess Tournament Sim - Game Menu",
+            dict([
+                ("advance day", self.AdvanceDay),
+                ("calendar", self.Calendar),
+                ("top players", self.TopPlayers),
+                ("tournaments", self.SendTournamentScreen)
+                ("exit", self.MakeExit)
+            ]),
+            add_exit=False
         )
+        tourn_scr = dms.dynamicmenuscreen(
+            "Chess Tournament Sim - Tournaments",
+            dict([
+                ("current tournaments", self.CurrentTournaments),
+                ("future tournaments", self.FutureTournaments)
+            ])
+        )
+        return temp_scr, tourn_scr
+
+    def SendTournamentScreen(self):
+        self.api.Call("add_screen", self.tourn_scr)
 
     def MenuFrame(self):
         self.disp_menu_frame = event.displayinputmessage(

@@ -4,6 +4,7 @@ import cts2.application.util.stringtable as stringtable
 import cts2.application.events.createplayerlist as createplayerlist
 import cts2.application.events.createplayer as createplayer
 
+
 class playerhandler(
     eventprocessor.eventprocessor,
     maintenancesubscriber.maintenancesubscriber
@@ -11,7 +12,7 @@ class playerhandler(
 
     def __init__(self, event_handler):
 
-		# initialize module as an eventprocessor
+        # initialize module as an eventprocessor
         self.event_dict = dict(
             get_player_list=self.GetPlayersEv
         )
