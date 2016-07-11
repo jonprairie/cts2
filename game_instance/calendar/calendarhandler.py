@@ -14,9 +14,11 @@ class calendarhandler(pkg.pkg):
                 "get_date_from_julian_offset",
                 "register_for_maintenance",
                 "advance_day"
-            ]
+            ],
+            ["def_options"]
         )
 
+    def Activate(self):
         self.default_options = self.api.Call(
             "def_options",
             [

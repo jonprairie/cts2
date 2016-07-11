@@ -8,7 +8,6 @@ import gameinstancemenu as gameinstancemenu
 
 class menuhandler(pkg.pkg):
     def __init__(self, api):
-
         pkg.pkg.__init__(
             self,
             api,

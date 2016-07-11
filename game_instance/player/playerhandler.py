@@ -1,48 +1,39 @@
-import cts2.application.util.eventprocessor as eventprocessor
-import cts2.application.util.maintenancesubscriber as maintenancesubscriber
 import cts2.application.util.stringtable as stringtable
-import cts2.application.events.createplayerlist as createplayerlist
-import cts2.application.events.createplayer as createplayer
 
 
-class playerhandler(
-    eventprocessor.eventprocessor,
-    maintenancesubscriber.maintenancesubscriber
-):
-
-    def __init__(self, event_handler):
-
-        # initialize module as an eventprocessor
-        self.event_dict = dict(
-            get_player_list=self.GetPlayersEv
-        )
-        eventprocessor.eventprocessor.__init__(
+class playerhandler(pkg.pkg):
+    def __init__(self, api):
+        pkg.pkg.__init__(
             self,
-            self.event_dict,
-            event_handler
-        )
-        maintenancesubscriber.maintenancesubscriber.__init__(
-            self, True, False, False, False
+            api,
+            "player_handler",
+            ["get_player_list"],
+            [
+                "register_for_maintenance",
+                "gen_player_list",
+                "def_options"
+            ]
         )
 
-        self.create_players_event = createplayerlist.createplayerlist(
-            self.default_options["num_initial_cpu_players"]
+    def Activate(self):
+        self.default_options = self.api.Call(
+            "def_options",
+            ["num_initial_cpu_players"]
         )
-        self.create_player_event = createplayer.createplayer()
-
-        self.player_list = []
-        self.num_players = self.default_options["num_initial_cpu_players"]
-        self.InitPlayers()
+        self.player_list = self.InitPlayers()
+        self.api.Call("register_for_maintenance", ["daily"])
 
     def InitPlayers(self):
-        self.event_handler.ProcessEvent(self.create_players_event)
-        self.player_list = self.create_players_event.player_list
+        return self.api.Call(
+            "gen_player_list",
+            self.default_options["num_initial_cpu_players"]
+        )
 
     def GetNumPlayers(self):
         return self.num_players
 
-    def GetPlayersEv(self, ev):
-        ev.player_list = self.GetPlayers()[:]
+    def GetPlayerList(self):
+        return self.GetPlayers()
 
     #Get Functions
     def GetPlayers(self):

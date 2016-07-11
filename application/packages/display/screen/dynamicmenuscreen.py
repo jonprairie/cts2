@@ -39,13 +39,19 @@ class dynamicmenuscreen:
 
     def PassInput(self, inp):
         if inp in self.list_widget.key_dict.keys():
-            temp = self.list_widget.key_dict[inp]()
-            if temp:
-                self.view_list.UpdateList(temp)
-            return False
+            return self.PassToList(inp)
         elif inp in self.view_list.keys():
-            _, chosen_element = self.view_list.GetElement(inp)
-            self.menu_dict[chosen_element]()
+            self.PassToInternal(inp)
+
+    def PassToList(self, inp):
+        temp = self.list_widget.key_dict[inp]()
+        if temp:
+            self.view_list.UpdateList(temp)
+        return False
+
+    def PassToInternal(self, inp):
+        _, chosen_element = self.view_list.GetElement(inp)
+        self.menu_dict[chosen_element]()
 
     def PageUp(self):
         return self.list_widget.GetPrevPage()

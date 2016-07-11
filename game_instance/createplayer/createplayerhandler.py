@@ -11,8 +11,11 @@ class createplayerhandler(pkg.pkg):
             [
                 "gen_player",
                 "gen_player_list"
-            ]
+            ],
+            ["def_options"]
         )
+
+    def Activate(self):
         self.default_options = self.api.Call(
             "def_options",
             [
