@@ -11,12 +11,6 @@ class gameinstancemenu:
         self.menu_screen, self.tourn_scr = self.BuildMenu()
         self.api = api
 
-        # self.display_string_table = event.displaystringtable(
-        #     [],
-        #     header="Top 10 Players (World)",
-        #     line_num=10
-        # )
-
     def BuildMenu(self):
         temp_scr = dms.dynamicmenuscreen(
             "Chess Tournament Sim - Game Menu",
@@ -24,7 +18,7 @@ class gameinstancemenu:
                 ("advance day", self.AdvanceDay),
                 ("calendar", self.Calendar),
                 ("top players", self.TopPlayers),
-                ("tournaments", self.SendTournamentScreen)
+                ("tournaments", self.SendTournamentScreen),
                 ("exit", self.MakeExit)
             ]),
             add_exit=False
@@ -45,37 +39,43 @@ class gameinstancemenu:
         self.api.Call("advance_day")
 
     def TopPlayers(self):
-        self.event_handler.ProcessEvent(self.get_player_list)
+        self.player_list = self.api.Call(
+            "get_player_list"
+        )
         player_st = stringtable.stringtable(
             "Players",
-            self.get_player_list.player_list
+            self.player_list
         )
         player_st.SortBy("elo", ascending=False)
-        self.display_string_table.st = player_st
-        self.event_handler.ProcessEvent(self.display_string_table)
+        self.api.Call(
+            "add_screen",
+            popup.popup(player_st.ToString(row_num=10))
+        )
 
     def CurrentTournaments(self):
-        self.tournament_list = self.api.Call(
-            "get_current_tournament_list"
+        tournament_list = self.api.Call(
+            "get_current_tournaments"
         )
         tournament_screen = listmenu.listmenu(
-            self.tournament_list,
+            "current tournaments",
+            tournament_list,
             self.DisplayTournament
         )
-        self.api.Call("add_screen", self.tournament_screen)
+        self.api.Call("add_screen", tournament_screen)
 
     def FutureTournaments(self):
-        self.fut_tournament_list = self.api.Call(
-            "get_non_started_tournament_list"
+        fut_tournament_list = self.api.Call(
+            "get_future_tournaments"
         )
         tournament_screen = listmenu.listmenu(
-            self.fut_tournament_list,
+            "future tournaments",
+            fut_tournament_list,
             self.DisplayTournament
         )
-        self.api.Call("add_screen", self.tournament_screen)
+        self.api.Call("add_screen", tournament_screen)
 
     def DisplayTournament(self, t):
-        str = "\n".join(
+        strg = "\n".join(
             [
                 "tournament: " + t.name,
                 "starts: " + str(t.start_julian_date),
@@ -84,19 +84,19 @@ class gameinstancemenu:
                 )
             ]
         )
-        self.api.Call(
-            "add_screen",
-            popup.popup(str)
-        )
+        self.api.Call("add_screen", popup.popup(strg))
 
     def Calendar(self):
         print "this is the calendar\n\tisn't it beautiful?"
 
     def MakeExit(self):
-        self.api.Call(
-            "add_screen",
-            ays.areyousure(
-                self.menu_screen.MakeExit,
-                " that you want to exit"
-            )
+        self.last_chance = ays.areyousure(
+            self.TrueExit,
+            " that you want to exit"
         )
+        self.api.Call("add_screen", self.last_chance)
+
+    def TrueExit(self):
+        '''TODO: Save game on exit'''
+        self.last_chance.MakeExit()
+        self.menu_screen.MakeExit()

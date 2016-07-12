@@ -3,7 +3,7 @@ import random
 
 import cts2.database.countries.country as country       #temporary
 
-conn = sqlite3.connect('../database/names/names.db')
+conn = sqlite3.connect('../../database/names/names.db')
 name_list = conn.execute('select firstname, lastname from fakenames').fetchall()
 
 def GetRandomFirst(gender="male", country=""):

@@ -17,7 +17,6 @@ class menuhandler(pkg.pkg):
         )
 
         self.menu_screen = self.BuildMainMenu()
-        self.menu_stack = [self]
 
     def Activate(self):
         self.api.Call("add_screen", self.menu_screen)
@@ -47,11 +46,24 @@ class menuhandler(pkg.pkg):
         raise Exception('exit')
 
     def NewGame(self):
-        # self.event_handler.ProcessEvent(self.init_game_instance_handlers)
-        # temp_menu = gameinstancemenu.gameinstancemenu()
-        # temp_menu.event_handler = self.event_handler
-        # self.menu_stack.append(temp_menu)
-        pass
+        self.api.Update(
+            self.api.Call(
+                "load_packages",
+                'cts2/game_instance'
+            )
+        )
+        self.api.Call(
+            "activate_packages",
+            self.api.GetPackages()
+        )
+        self.game_instance_menu = gameinstancemenu.gameinstancemenu(
+            self.api
+        )
+        self.api.Call(
+            "add_screen",
+            self.game_instance_menu.menu_screen
+        )
 
     def LoadGame(self):
+        '''TODO: Load game'''
         pass

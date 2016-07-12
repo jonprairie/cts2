@@ -1,6 +1,7 @@
 import cts2.game_instance.federation.tournamentdirector as tournamentdirector
 import random
 
+
 class federation:
     def __init__(self, api, country):
         self.api = api

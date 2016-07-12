@@ -9,7 +9,7 @@ class federationhandler(pkg.pkg):
             self,
             api,
             "federation_handler",
-            [],
+            ["federation_handler_dummy"],
             ["register_for_maintenance"]
         )
 

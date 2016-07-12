@@ -39,12 +39,12 @@ class calendarhandler(pkg.pkg):
         self.date_list = []
         self.InitDateList()
 
-        self.maint_dict = dict(
+        self.maint_dict = dict([
             ("daily", []),
             ("weekly", []),
             ("monthly", []),
             ("annually", [])
-        )
+        ])
 
     def GetDateFromJulianOffset(self):
         return self.GetDate(ev.julian_offset)
@@ -102,7 +102,6 @@ class calendarhandler(pkg.pkg):
         for days in range(num_days):
             self.current_date_index += 1
             self.ExtendDateList(1)
-
             for obj in self.maint_dict["daily"]:
                 obj.DailyMaintenance(self.current_date_index)
             if self.IsWeek():

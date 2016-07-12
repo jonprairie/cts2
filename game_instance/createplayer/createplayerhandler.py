@@ -1,5 +1,5 @@
 import cts2.application.util.pkg as pkg
-import genplayer
+import cts2.game_instance.createplayer.genplayer as genplayer
 
 
 class createplayerhandler(pkg.pkg):
@@ -29,5 +29,7 @@ class createplayerhandler(pkg.pkg):
 
     def GenPlayerList(self, num_players=1):
         return [
-            genplayer.GenPlayer(self.default_options) for p in num_players
+            genplayer.GenPlayer(
+                self.default_options
+            ) for p in range(num_players)
         ]

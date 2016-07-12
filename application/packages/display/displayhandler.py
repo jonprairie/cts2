@@ -59,10 +59,16 @@ class displayhandler(pkg.pkg):
     def Display(self):
         '''filter exited screens from display stack, then
         display top screen'''
+        exit_stack = filter(
+            lambda x: x.GetExit(),
+            self.screen_stack
+        )
         self.screen_stack = filter(
             lambda x: not x.GetExit(),
             self.screen_stack
         )
+        for scr in exit_stack:
+            scr.exit = False
         self.DisplayScreen(
             self.screen_stack[-1]
         )

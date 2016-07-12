@@ -13,4 +13,4 @@ class popup(screen.screen):
         )
 
     def __str__(self):
-        return self.msg
+        return str(self.msg)

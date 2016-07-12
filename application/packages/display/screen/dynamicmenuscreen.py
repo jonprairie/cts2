@@ -21,7 +21,7 @@ class dynamicmenuscreen:
             d=self.PageDown
         )
         if add_exit:
-            key_dict.update((x, self.Exit))
+            key_dict.update([('x', self.MakeExit)])
         self.list_widget = scrollablelist.scrollablelist(
             disp_list,
             key_dict,
@@ -59,7 +59,7 @@ class dynamicmenuscreen:
     def PageDown(self):
         return self.list_widget.GetNextPage()
 
-    def Exit(self):
+    def MakeExit(self):
         self.exit = True
 
     def GetExit(self):

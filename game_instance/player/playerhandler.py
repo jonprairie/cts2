@@ -1,4 +1,5 @@
 import cts2.application.util.stringtable as stringtable
+import cts2.application.util.pkg as pkg
 
 
 class playerhandler(pkg.pkg):
@@ -21,7 +22,7 @@ class playerhandler(pkg.pkg):
             ["num_initial_cpu_players"]
         )
         self.player_list = self.InitPlayers()
-        self.api.Call("register_for_maintenance", ["daily"])
+        self.api.Call("register_for_maintenance", self, ["daily"])
 
     def InitPlayers(self):
         return self.api.Call(
