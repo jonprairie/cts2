@@ -56,6 +56,14 @@ class menuhandler(pkg.pkg):
             "activate_packages",
             self.api.GetPackages()
         )
+        self.BringUpGame()
+
+    def LoadGame(self):
+        '''TODO: Load game'''
+        self.api.Call("load_game")
+        self.BringUpGame()
+
+    def BringUpGame(self):
         self.game_instance_menu = gameinstancemenu.gameinstancemenu(
             self.api
         )
@@ -63,7 +71,3 @@ class menuhandler(pkg.pkg):
             "add_screen",
             self.game_instance_menu.menu_screen
         )
-
-    def LoadGame(self):
-        '''TODO: Load game'''
-        pass

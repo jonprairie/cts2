@@ -18,6 +18,7 @@ class optionhandler(pkg.pkg):
         self.options_dict = dict(
             # application options
             save_game_path = "../../save/",
+            
             # human player options
             real_player_elo = 1800,
             corresponding_elo = 2650,

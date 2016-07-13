@@ -94,14 +94,6 @@ class gameinstancemenu:
 
     def SaveGame(self):
         self.api.Call("save_game")
-        # self.api.Call(
-        #     "add_screen",
-        #     popup.popup(
-        #         str(
-        #             self.api.GetSavePackages()
-        #         )
-        #     )
-        # )
 
     def MakeExit(self):
         self.last_chance = ays.areyousure(

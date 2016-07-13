@@ -23,3 +23,6 @@ class pkg:
 
     def AddAPI(self, api):
         self.api = api
+
+    def GetExposeMapping(self):
+        return dict((e, self) for e in self.expose)

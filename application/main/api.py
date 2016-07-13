@@ -35,7 +35,7 @@ class api:
         except Exception as e:
             if e.message != "exit":
                 print "API Error:"
-                print "  api function:", module.name + "." + func_name, api_call
+                print "  api function:", func_name, api_call
                 print "  args:", args
                 print "  kwargs:", kwargs
                 print "-"*60
