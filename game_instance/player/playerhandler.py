@@ -13,7 +13,8 @@ class playerhandler(pkg.pkg):
                 "register_for_maintenance",
                 "gen_player_list",
                 "def_options"
-            ]
+            ],
+            save_ind=True
         )
 
     def Activate(self):

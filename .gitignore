@@ -28,6 +28,7 @@
 *.html
 *.sql
 *.sqlite
+*.cts
 
 # OS generated files #
 ######################

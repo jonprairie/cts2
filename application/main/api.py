@@ -16,6 +16,12 @@ class api:
     def GetPackages(self):
         return set(self.api_call_mapping.values())
 
+    def GetSavePackages(self):
+        return filter(
+            lambda x: x.save_ind,
+            self.GetPackages()
+        )
+
     def Call(self, api_call, *args, **kwargs):
         func_name = "".join(
             w.capitalize() for w in api_call.split("_")

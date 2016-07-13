@@ -6,6 +6,7 @@ import cts2.application.packages.display.screen.areyousure as ays
 import cts2.application.packages.display.screen.popup as popup
 import cts2.application.packages.display.screen.listmenu as listmenu
 
+
 class gameinstancemenu:
     def __init__(self, api):
         self.menu_screen, self.tourn_scr = self.BuildMenu()
@@ -19,6 +20,7 @@ class gameinstancemenu:
                 ("calendar", self.Calendar),
                 ("top players", self.TopPlayers),
                 ("tournaments", self.SendTournamentScreen),
+                ("save game", self.SaveGame),
                 ("exit", self.MakeExit)
             ]),
             add_exit=False
@@ -75,6 +77,7 @@ class gameinstancemenu:
         self.api.Call("add_screen", tournament_screen)
 
     def DisplayTournament(self, t):
+        '''TODO: add dedicated tournament display scree'''
         strg = "\n".join(
             [
                 "tournament: " + t.name,
@@ -88,6 +91,17 @@ class gameinstancemenu:
 
     def Calendar(self):
         print "this is the calendar\n\tisn't it beautiful?"
+
+    def SaveGame(self):
+        self.api.Call("save_game")
+        # self.api.Call(
+        #     "add_screen",
+        #     popup.popup(
+        #         str(
+        #             self.api.GetSavePackages()
+        #         )
+        #     )
+        # )
 
     def MakeExit(self):
         self.last_chance = ays.areyousure(

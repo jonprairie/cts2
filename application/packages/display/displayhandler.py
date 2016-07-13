@@ -4,7 +4,6 @@ import os
 
 
 class displayhandler(pkg.pkg):
-    # TODO: implement eventprocessor
     def __init__(self, api):
         self.read_sysin_ev = messageevent.messageevent(
             "read_sysin"

@@ -15,7 +15,8 @@ class calendarhandler(pkg.pkg):
                 "register_for_maintenance",
                 "advance_day"
             ],
-            ["def_options"]
+            ["def_options"],
+            save_ind=True
         )
 
     def Activate(self):

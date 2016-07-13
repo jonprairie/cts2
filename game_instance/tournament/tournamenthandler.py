@@ -20,7 +20,8 @@ class tournamenthandler(pkg.pkg):
             [
                 "register_for_maintenance",
                 "def_options"
-            ]
+            ],
+            save_ind=True
         )
         self.tournament_list = []
 
