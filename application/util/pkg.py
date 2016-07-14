@@ -7,8 +7,10 @@ class pkg:
         dependencies,
         save_ind=False
     ):
-        '''pkg should set save_ind if pkg should be saved
-        on save game'''
+        '''classes that inherit from pkg should not rely on external
+        pkgs for __init__, any external dependencies should be documented
+        in the dependencies list and resolved in Activate. pkg should only
+        set save_ind if pkg should be saved on save game'''
         self.api = api
         self.name = name
         self.expose = expose

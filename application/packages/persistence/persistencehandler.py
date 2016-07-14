@@ -37,27 +37,17 @@ class persistencehandler(pkg.pkg):
             handler.AddAPI(self.api)
 
     def LoadGame(self):
-        self.api.Update(
-            self.api.Call(
-                "load_packages",
-                'cts2/game_instance'
-            )
-        )
         full_path = self.default_options["save_game_path"] + "save.cts"
         with open(full_path, "r") as save_file:
             save_list = cPickle.load(save_file)
-        pkg_list = self.api.GetPackages()
-        current_keys = [
+        pkg_list = self.api.Call("get_packages")
+        current_keys = set(
             k for pckg in self.api.GetSavePackages() for k in pckg.expose
-        ]
-        save_keys = [k for handler in save_list for k in handler.expose]
-        key_int = set(save_keys) & set(current_keys)
-        for k in save_keys + current_keys:
-            if k not in key_int:
-                raise Exception("version not compatible, key: " + str(k))
-        new_expose_dict = dict()
-        for d in [
-            handler.GetExposeMapping() for handler in save_list
-        ]:
-            new_expose_dict.update(d)
-        self.api.Update(new_expose_dict)
+        )
+        save_keys = set(k for handler in save_list for k in handler.expose)
+        key_diff = save_keys ^ current_keys
+        if key_diff:
+            raise Exception(
+                "version not compatible, missing functionality: " + str(key_dif)
+            )
+        return save_list

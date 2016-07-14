@@ -46,11 +46,9 @@ class menuhandler(pkg.pkg):
         raise Exception('exit')
 
     def NewGame(self):
-        self.api.Update(
-            self.api.Call(
-                "load_packages",
-                'cts2/game_instance'
-            )
+        self.api.Call(
+            "load_packages",
+            'cts2/game_instance'
         )
         self.api.Call(
             "activate_packages",
@@ -59,8 +57,21 @@ class menuhandler(pkg.pkg):
         self.BringUpGame()
 
     def LoadGame(self):
-        '''TODO: Load game'''
-        self.api.Call("load_game")
+        self.api.Call(
+            "load_packages",
+            'cts2/game_instance'
+        )
+        self.api.Call(
+            "update_api_from_list",
+            self.api.Call("load_game")
+        )
+        self.api.Call(
+            "activate_packages",
+            filter(
+                lambda x: not x.save_ind,
+                self.api.Call("get_packages")
+            )
+        )
         self.BringUpGame()
 
     def BringUpGame(self):

@@ -9,9 +9,21 @@ class pkgloaderhandler(pkg.pkg):
             self,
             api,
             "pkg_loader",
-            ["load_packages"],
+            [
+                "load_packages",
+                "set_packages",
+                "get_packages",
+                "update_api_from_list"
+            ],
             []
         )
+        self.pkg_list = []
+
+    def SetPackages(self, pkg_list):
+        self.pkg_list = pkg_list
+
+    def GetPackages(self):
+        return self.pkg_list
 
     def DiscoverPackages(self, pkg_addr):
         py_pkg_addr = pkg_addr.replace("/", ".")
@@ -30,24 +42,37 @@ class pkgloaderhandler(pkg.pkg):
 
     def LoadPackages(self, pkg_addr):
         py_pkg_addrs = self.DiscoverPackages(pkg_addr)
-        ret_dict = dict()
-        for p in py_pkg_addrs:
-            ret_dict.update(self.LoadPackage(p))
-        return ret_dict
+        pkg_list = [self.LoadPackage(p) for p in py_pkg_addrs]
+        self.api.Update(self.BuildExposeMappingFromList(pkg_list))
+        return pkg_list
 
     def LoadPackage(self, pkg):
         l = pkg.split(".")
-        print "loading: " + pkg.split(".")[len(l)-1] + ", exposing:"
+        print "loading: " + pkg.split(".")[-1] + ", exposing:"
         handler = self.InitPackage(pkg)
-        ret_dict = dict()
+        self.pkg_list.append(handler)
+        return handler
+
+    def UpdateApiFromList(self, pkg_list):
+        call_mapping = self.BuildExposeMappingFromList(pkg_list)
+        self.api.Update(call_mapping)
+
+    def BuildExposeMappingFromList(self, handlers):
+        call_mapping = dict()
+        for h in handlers:
+            call_mapping.update(self.BuildExposeMapping(h))
+        return call_mapping
+
+    def BuildExposeMapping(self, handler):
+        call_mapping = dict()
         for c in handler.expose:
             print "    " + c
-            ret_dict.update(
+            call_mapping.update(
                 dict(
                     (api_call, handler) for api_call in handler.expose
                 )
             )
-        return ret_dict
+        return call_mapping
 
     def InitPackage(self, pkg):
         return locate(pkg)(self.api)
