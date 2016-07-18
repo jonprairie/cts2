@@ -5,7 +5,7 @@ import widget.selectablelist as selectablelist
 
 class dynamicmenuscreen:
     # TODO: make key_dict/page_sz a default option
-    # TODO: implement screen
+    # TODO: implement screen/refactor, screens should handle input, not widgets
 
     def __init__(
         self,
@@ -22,42 +22,43 @@ class dynamicmenuscreen:
         )
         if add_exit:
             key_dict.update([('x', self.MakeExit)])
-        self.list_widget = scrollablelist.scrollablelist(
+        self.scroll_list = scrollablelist.scrollablelist(
             disp_list,
             key_dict,
             page_sz
         )
-        self.view_list = selectablelist.selectablelist(
-            self.list_widget.GetCurrentPage()
+        self.slct_list = selectablelist.selectablelist(
+            self.scroll_list.GetCurrentPage()
         )
         self.name = name
         self.exit = False
         self.display_only = False
 
     def __str__(self):
-        return self.name.upper() + '\n' + str(self.view_list)
+        return self.name.upper() + '\n' + str(self.slct_list)
 
     def PassInput(self, inp):
-        if inp in self.list_widget.key_dict.keys():
+        if inp in self.scroll_list.key_dict.keys():
             return self.PassToList(inp)
-        elif inp in self.view_list.keys():
+        elif inp in self.slct_list.keys():
             self.PassToInternal(inp)
 
     def PassToList(self, inp):
-        temp = self.list_widget.key_dict[inp]()
+        self.scroll_list.key_dict[inp]()
+        temp = self.scroll_list.GetCurrentPage()
         if temp:
-            self.view_list.UpdateList(temp)
+            self.slct_list.UpdateList(temp)
         return False
 
     def PassToInternal(self, inp):
-        _, chosen_element = self.view_list.GetElement(inp)
+        _, chosen_element = self.slct_list.GetElement(inp)
         self.menu_dict[chosen_element]()
 
     def PageUp(self):
-        return self.list_widget.GetPrevPage()
+        return self.scroll_list.GetPrevPage()
 
     def PageDown(self):
-        return self.list_widget.GetNextPage()
+        return self.scroll_list.GetNextPage()
 
     def MakeExit(self):
         self.exit = True

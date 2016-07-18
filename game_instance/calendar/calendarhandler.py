@@ -62,25 +62,36 @@ class calendarhandler(pkg.pkg):
             self.date_list.append(temp_date_2)
 
     def ExtendDateList(self, num_days):
-        last_ordinal = self.date_list[len(self.date_list)-1].date.toordinal() + 1
-        date_list_addition = [date.date(date=datetime.date.fromordinal(last_ordinal+x)) for x in range(num_days)]
+        last_ordinal = self.date_list[
+            len(self.date_list)-1
+        ].date.toordinal() + 1
+        date_list_addition = [
+            date.date(
+                date=datetime.date.fromordinal(last_ordinal + x)
+            ) for x in range(num_days)
+        ]
         self.date_list.extend(date_list_addition)
 
-    #Get Functions
+    # Get Functions
     def GetCurrentDate(self):
         return self.GetDate(0)
 
     def GetDate(self, date_offset):
-        """returns the date corresponding to the current date's index + date_index"""
-
+        """
+        returns the date corresponding to the current date's
+        index + date_index
+        """
         date_index = self.current_date_index + date_offset
         if date_index >= len(self.date_list):
             self.ExtendDateList(date_index-len(self.date_list)+1)
         return self.date_list[date_index]
 
     def GetDateRange(self, start_date, index_list):
-        """takes a start date and a list of indexes and returns a list of the dates corresponding to the
-        indexes, relative to the start date's index"""
+        """
+        takes a start date and a list of indexes and returns a
+        list of the dates corresponding to the
+        indexes, relative to the start date's index
+        """
 
         ret_list = []
         start_date_index = self.date_list.index(start_date)

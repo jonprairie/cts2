@@ -15,5 +15,5 @@ class listmenu(dynamicmenuscreen.dynamicmenuscreen):
         )
 
     def PassToInternal(self, inp):
-        _, chosen_element = self.view_list.GetElement(inp)
+        _, chosen_element = self.slct_list.GetElement(inp)
         self.func(chosen_element)
