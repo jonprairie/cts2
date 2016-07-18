@@ -11,4 +11,7 @@ class tournamentdirector(maintenancesubscriber.maintenancesubscriber):
 
     def WeeklyMaintenance(self, date):
         if not self.current_tournament:
-            self.current_tournament = self.api.CreateTournament()
+            self.current_tournament = self.api.CreateTournament(
+                self.start_julian_date,
+                offset=False
+            )

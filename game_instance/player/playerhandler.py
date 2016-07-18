@@ -1,4 +1,7 @@
-import cts2.application.util.stringtable as stringtable
+"""
+handles processing and maintenance of the player list for the
+application.
+"""
 import cts2.application.util.pkg as pkg
 
 
@@ -16,6 +19,8 @@ class playerhandler(pkg.pkg):
             ],
             save_ind=True
         )
+        self.default_options = None
+        self.player_list = None
 
     def Activate(self):
         self.default_options = self.api.Call(
@@ -23,7 +28,14 @@ class playerhandler(pkg.pkg):
             ["num_initial_cpu_players"]
         )
         self.player_list = self.InitPlayers()
-        self.api.Call("register_for_maintenance", self, ["daily"])
+        self.api.Call(
+            "register_for_maintenance",
+            self,
+            [
+                "daily",
+                "monthly"
+            ]
+        )
 
     def InitPlayers(self):
         return self.api.Call(
@@ -31,29 +43,32 @@ class playerhandler(pkg.pkg):
             self.default_options["num_initial_cpu_players"]
         )
 
-    def GetNumPlayers(self):
-        return self.num_players
-
     def GetPlayerList(self):
         return self.GetPlayers()
 
-    #Get Functions
+    # Get Functions
     def GetPlayers(self):
         return self.player_list
 
-    #Maintenance Functions
-    #def RegisterForTournaments(self):
+    # Maintenance Functions
+    # def RegisterForTournaments(self):
     #    tournament_list = self.tournament_handler.GetNewTournaments()
     #    for p in self.player_list:
     #        p.RegisterForTournaments(tournament_list)
 
-    def DailyMaintenance(self, date):
+    def DailyMaintenance(self, _):
         # self.RegisterForTournaments()
         for p in self.player_list:
             p.ProcessInvites()
 
+    def MonthlyMaintenance(self, _):
+        for p in self.player_list:
+            p.UpdateElo()
+
+
 def PlayerCMP(player_x, player_y):
-    """returns -1 if player_x's elo is greater than player_y's elo, 0 if they are equal, and 1 otherwise"""
+    """returns -1 if player_x's elo is greater than player_y's
+    elo, 0 if they are equal, and 1 otherwise"""
 
     if player_x.GetElo() > player_y.GetElo():
         return -1

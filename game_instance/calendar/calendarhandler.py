@@ -12,6 +12,7 @@ class calendarhandler(pkg.pkg):
             "calendar_handler",
             [
                 "get_date_from_julian_offset",
+                "get_current_julian",
                 "register_for_maintenance",
                 "advance_day"
             ],
@@ -46,6 +47,9 @@ class calendarhandler(pkg.pkg):
             ("monthly", []),
             ("annually", [])
         ])
+
+    def GetCurrentJulian(self):
+        return self.current_date_index
 
     def GetDateFromJulianOffset(self):
         return self.GetDate(ev.julian_offset)

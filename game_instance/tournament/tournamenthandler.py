@@ -1,5 +1,7 @@
+"""
+handles processing and maintenance of the list of tournaments
+"""
 import cts2.application.util.pkg as pkg
-import cts2.application.util.stringtable as stringtable
 import cts2.database.tournamentnameinterface as tournamentnameinterface
 import cts2.game_instance.tournament.drrinvitational as drrinvitational
 import random
@@ -24,19 +26,30 @@ class tournamenthandler(pkg.pkg):
             save_ind=True
         )
         self.tournament_list = []
+        self.default_options = None
 
     def Activate(self):
-        self.api.Call("register_for_maintenance", self, ["daily"])
+        self.api.Call(
+            "register_for_maintenance",
+            self,
+            [
+                "daily",
+                "weekly"
+            ]
+        )
         self.default_options = self.api.Call(
             "def_options",
-            ["round_robin_player_range"]
+            [
+                "round_robin_player_range",
+                "tournament_rate",
+                "tourn_buff_lookahead",
+                "tourn_buff_range"
+            ]
         )
 
-    def CreateTournament(self):
-        return self.CreateRandomTournament()
-
-    def CreateRandomTournament(self):
-        start_date = random.randint(15, 365)
+    def CreateTournament(self, start_date, offset=True):
+        if offset:
+            start_date += self.api.Call("get_current_julian")
         name = tournamentnameinterface.GenRandTournamentName()
         new_tournament = drrinvitational.drrinvitational(
             name,
@@ -46,21 +59,76 @@ class tournamenthandler(pkg.pkg):
         self.tournament_list.append(new_tournament)
         return new_tournament
 
+    def CreateRandomTournament(self):
+        start_date = random.randint(15, 365)
+        return self.CreateTournament(start_date, offset=False)
+
     def GetCurrentTournaments(self):
-        return self.tournament_list
+        return filter(
+            lambda t: t.started and not t.finished,
+            self.tournament_list
+        )
+
+    def GetTournamentsInRange(self, start=0, length=1):
+        today = self.api.Call("get_current_julian")
+        temp_list = filter(
+            lambda t: t.start_julian_date in range(
+                today + start,
+                today + start + length
+            ),
+            self.tournament_list
+        )
+        self.api.Call(
+            "log_msg",
+            "today: " + str(today) + "\n" +
+            "tournaments found: " + str(len(temp_list)) + "\n" +
+            "tournaments: " + "\n".join([
+                t.name + ": " + str(
+                    t.start_julian_date
+                ) for t in self.tournament_list
+            ])
+        )
+        return temp_list
 
     def GetFutureTournaments(self):
-        return self.tournament_list
+        return filter(
+            lambda t: not t.started,
+            self.tournament_list
+        )
 
     def SendInvites(self, t, player_list):
         random.shuffle(
             player_list
         )
         for p in player_list:
-            if t.SendInvite(p):
-                pass
+            t.SendInvite(p)
             if t.InvitesFull():
                 break
+
+    def BufferTournaments(self):
+        """
+        buffers tournament pool based on the default option
+        tournament_rate (measured in players per current
+        tournament).
+        """
+        upc_t_count = len(self.GetTournamentsInRange(
+            start=self.default_options["tourn_buff_lookahead"],
+            length=self.default_options["tourn_buff_range"]
+        ))
+        player_count = len(self.api.Call("get_player_list"))
+        exp_count = player_count / self.default_options["tournament_rate"]
+        t_diff = exp_count - upc_t_count
+        if t_diff > 0:
+            num_tournaments = abs(random.normalvariate(0, t_diff))
+            start_date_mean = (
+                self.default_options["tourn_buff_range"] / 2
+            ) + self.default_options["tourn_buff_lookahead"]
+            for t in range(int(num_tournaments)):
+                start_date = int(random.normalvariate(start_date_mean, 5))
+                self.CreateTournament(start_date)
+
+    def WeeklyMaintenance(self, date):
+        self.BufferTournaments()
 
     def DailyMaintenance(self, date):
         player_list = self.api.Call("get_player_list")

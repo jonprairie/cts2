@@ -1,3 +1,6 @@
+"""
+representation of a chess player
+"""
 import cts2.game_instance.player.invitereceiver as invitereceiver
 import cts2.application.util.row as row
 import playertournamenthandler
@@ -9,8 +12,12 @@ class player(
 ):
     """chess player"""
 
-#    def __init__(self, first_name, last_name, age, gender = "male", country=0, title = None, elo = default_options["elo"], play_strength = 0, fame = default_options["player_fame"], player_type = "cpu"):
-    def __init__(self, first_name, last_name, age, gender = "male", country=0, title = None, elo = 2500, play_strength = 2500, fame = 2500, player_type = "cpu"):
+    def __init__(
+        self, first_name, last_name, age,
+        gender="male", country=None, title=None,
+        elo=2500, play_strength=2500, fame=2500,
+        player_type="cpu"
+    ):
 
         self.player_num = numgenerator.num_gen.GenNum()
         self.first_name = first_name    #player's first name
@@ -30,7 +37,17 @@ class player(
         self.player_tournament_handler = playertournamenthandler.playertournamenthandler()
 
         invitereceiver.invitereceiver.__init__(self)
-        row.row.__init__(self, dict(last=self.last_name, first=self.first_name, age=self.age, country=self.country.GetShortName(), elo=self.elo))
+        row.row.__init__(
+            self,
+            dict(
+                last=self.last_name,
+                first=self.first_name,
+                age=self.age,
+                country=self.country.GetShortName(),
+                elo=self.GetElo(strng=True),
+                live_elo=self.GetLiveElo(strng=True)
+            )
+        )
 
     #Get Functions
     def __str__(self):
@@ -57,14 +74,19 @@ class player(
     def GetCountry(self):
         return self.country
 
-    def GetElo(self):
+    def GetElo(self, strng=False):
         """returns official elo"""
+        if strng:
+            return "{0:.1f}".format(self.elo)
+        else:
+            return self.elo
 
-        return self.elo
-
-    def GetLiveElo(self):
+    def GetLiveElo(self, strng=False):
         """returns 'live' elo"""
-        return self.live_elo
+        if strng:
+            return "{0:.1f}".format(self.live_elo)
+        else:
+            return self.live_elo
 
     def GetPlayStrength(self):
         return self.play_strength.GetPlayStrength()
@@ -115,9 +137,11 @@ class player(
 
     def UpdateElo(self):
         self.elo = self.live_elo
+        self.UpdateRow("elo", self.GetElo(strng=True))
 
     def UpdateLiveElo(self, rating_adjustment):
         self.live_elo += rating_adjustment
+        self.UpdateRow("live_elo", self.GetLiveElo(strng=True))
 
     # def EvaluateInvite(self, tournament):
     #     """Evaluates an invitation from a tournament. Accepts or rejects the invite.

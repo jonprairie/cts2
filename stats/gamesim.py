@@ -26,7 +26,7 @@ def RatingAdjustment(r_a, r_b, res):
     """result is instance of result. r_a is assumed to be the rating
     of the white player, r_b the black player"""
 
-    e_a, e_b = ExpectedValue(r_a, r_b)
+    e_a, _ = ExpectedValue(r_a, r_b)
 
     ra_a = k_factor*(res.WhiteResult() - e_a)
     ra_b = -ra_a

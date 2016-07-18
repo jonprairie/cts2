@@ -8,6 +8,8 @@ class game(row.row):
         self.is_finished = False
         self.result = ""
         self.result_obj = None
+        self.white_score = None
+        self.black_score = None
         row.row.__init__(
             self,
             dict(
@@ -18,7 +20,7 @@ class game(row.row):
         )
 
     def __str__(self):
-        return result+str(self.white)+" - "+str(self.black)
+        return self.result+str(self.white)+" - "+str(self.black)
 
     def Simulate(self):
         self.is_finished = True
@@ -26,6 +28,13 @@ class game(row.row):
             self.white.GetPlayStrength(),
             self.black.GetPlayStrength()
         )
+        rate_adj_wht, rate_adj_blk = gamesim.RatingAdjustment(
+            self.white.GetPlayStrength(),
+            self.black.GetPlayStrength(),
+            self.result_obj
+        )
+        self.white.UpdateLiveElo(rate_adj_wht)
+        self.black.UpdateLiveElo(rate_adj_blk)
         self.UpdateRow(
             "result",
             self.result_obj.ToString()

@@ -1,3 +1,6 @@
+"""
+game instance menu
+"""
 import cts2.application.util.stringtable as stringtable
 import cts2.application.packages.menu.arch.node as node
 import cts2.application.packages.menu.arch.menudriver as menudriver
@@ -90,7 +93,11 @@ class gameinstancemenu:
         self.api.Call("add_screen", popup.popup(strg))
 
     def Calendar(self):
-        print "this is the calendar\n\tisn't it beautiful?"
+        today = self.api.Call("get_current_julian")
+        self.api.Call(
+            "add_screen",
+            popup.popup("today is: " + str(today))
+        )
 
     def SaveGame(self):
         self.api.Call("save_game")

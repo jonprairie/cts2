@@ -18,7 +18,7 @@ class optionhandler(pkg.pkg):
         self.options_dict = dict(
             # application options
             save_game_path = "../../save/",
-            
+
             # human player options
             real_player_elo = 1800,
             corresponding_elo = 2650,
@@ -42,6 +42,9 @@ class optionhandler(pkg.pkg):
             time_control = (45,0,0,45),
 
             # tournament options
+            tournament_rate = 25,
+            tourn_buff_range = 20,
+            tourn_buff_lookahead = 20,
             tournament_prestige = 50,
             tournament_prestige_decay_factor = 1,
             tournament_open = False,
