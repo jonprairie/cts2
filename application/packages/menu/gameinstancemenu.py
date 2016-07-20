@@ -21,6 +21,7 @@ class gameinstancemenu:
             dict([
                 ("advance day", self.AdvanceDay),
                 ("calendar", self.Calendar),
+                ("players", self.SendPlayerScreen),
                 ("top players", self.TopPlayers),
                 ("tournaments", self.SendTournamentScreen),
                 ("save game", self.SaveGame),
@@ -36,9 +37,6 @@ class gameinstancemenu:
             ])
         )
         return temp_scr, tourn_scr
-
-    def SendTournamentScreen(self):
-        self.api.Call("add_screen", self.tourn_scr)
 
     def AdvanceDay(self):
         self.api.Call("advance_day")
@@ -56,6 +54,39 @@ class gameinstancemenu:
             "add_screen",
             popup.popup(player_st.ToString(row_num=10))
         )
+
+    def SendPlayerScreen(self):
+        player_list = self.api.Call("get_player_list")
+        player_scr = listmenu.listmenu(
+            "players",
+            player_list,
+            self.DisplayPlayer
+        )
+        self.api.Call("add_screen", player_scr)
+
+    def DisplayPlayer(self, p):
+        strg = "\n".join(
+            [
+                "player: " + p.InvertName(),
+                "age: " + str(p.age),
+                "elo: " + p.GetElo(True),
+                "live elo: " + p.GetLiveElo(True),
+                "curr tourn: " + str(p.pth.GetCurrentTournament()),
+                "\ngames:\n" + "\n".join(
+                    [str(g) for g in p.pth.GetGameList()]
+                ),
+                "\ntournaments:\n" + "\n".join(
+                    [
+                        str(t) + " " + str(t.start_julian_date)
+                        for t in p.pth.GetFutureTournaments()
+                    ]
+                )
+            ]
+        )
+        self.api.Call("add_screen", popup.popup(strg))
+
+    def SendTournamentScreen(self):
+        self.api.Call("add_screen", self.tourn_scr)
 
     def CurrentTournaments(self):
         tournament_list = self.api.Call(

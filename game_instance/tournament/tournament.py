@@ -36,6 +36,9 @@ class tournament(row.row):
     def RowStr(self):
         return "tournament." + self.name
 
+    def IsFinished(self):
+        return self.finished
+
     def AddPlayer(self, p):
         if p not in self.player_list:
             self.player_list.append(p)
@@ -70,6 +73,9 @@ class tournament(row.row):
 
     def HasEnoughPlayers(self):
         return self.num_player_range[0] <= len(self.player_list)
+
+    def IsCurrent(self):
+        return self.started and not self.finished and not self.cancel
 
     def IsDoubleRoundRobin(self):
         return False

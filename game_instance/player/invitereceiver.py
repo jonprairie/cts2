@@ -1,5 +1,6 @@
 import random
 
+
 class invitereceiver:
     def __init__(self):
         self.pending_invites = []
@@ -19,13 +20,17 @@ class invitereceiver:
         inv.sender.AcceptInvitation(inv)
         self.accepted_invites.append(inv)
         self.pending_invites.remove(inv)
+        self.AcceptCleanUp(inv)
+
+    def AcceptCleanUp(self, inv):
+        pass
 
     def DeclineInvitation(self, inv):
         inv.sender.DeclineInvitation(inv)
         self.pending_invites.remove(inv)
 
     def EvaluateInvite(self, inv):
-        if random.randint(1,100) < 25:
+        if random.randint(1, 100) < 25:
             return True
         else:
             return False

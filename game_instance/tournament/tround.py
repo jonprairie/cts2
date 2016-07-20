@@ -12,19 +12,19 @@ class tround:
                 player_list[p[0]],
                 player_list[p[1]]
             ) for p in pairings if (
-                p[0]!='bye' and p[1]!='bye'
+                p[0] != 'bye' and p[1] != 'bye'
             )
         ]
         self.bye_list = [
             player_list[p[n]] for n in range(2) for p in pairings
             if (
-                p[n]!='bye' and p[abs(n-1)]=='bye'
+                p[n] != 'bye' and p[abs(n-1)] == 'bye'
             )
         ]
         self.round_st = stringtable.stringtable(
             "round " + str(round_num),
             self.game_list,
-            footer = "\n".join(
+            footer="\n".join(
                 'bye: ' + str(b) for b in self.bye_list
             )
         )

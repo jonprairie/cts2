@@ -1,6 +1,7 @@
 import cts2.game_instance.tournament.invitationaltournament as invitationaltournament
 import cts2.game_instance.tournament.doubleroundrobin as doubleroundrobin
 
+
 class drrinvitational(
     invitationaltournament.invitationaltournament,
     doubleroundrobin.doubleroundrobin

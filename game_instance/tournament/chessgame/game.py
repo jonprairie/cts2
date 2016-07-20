@@ -1,6 +1,7 @@
 import cts2.application.util.row as row
 import cts2.stats.gamesim as gamesim
 
+
 class game(row.row):
     def __init__(self, white, black):
         self.white = white
@@ -20,7 +21,18 @@ class game(row.row):
         )
 
     def __str__(self):
-        return self.result+str(self.white)+" - "+str(self.black)
+        if self.result_obj is None:
+            return " "*7+str(self.white)+" - "+str(self.black)
+        else:
+            return self.result_obj.ToString() + " " + str(
+                self.white
+            ) + " - " + str(self.black)
+
+    def UpdatePlayers(self, w, b):
+        self.white = w
+        self.black = b
+        self.UpdateRow("w", w)
+        self.UpdateRow("b", b)
 
     def Simulate(self):
         self.is_finished = True
@@ -35,6 +47,8 @@ class game(row.row):
         )
         self.white.UpdateLiveElo(rate_adj_wht)
         self.black.UpdateLiveElo(rate_adj_blk)
+        self.white.AddGame(self)
+        self.black.AddGame(self)
         self.UpdateRow(
             "result",
             self.result_obj.ToString()
@@ -45,18 +59,18 @@ class game(row.row):
         self.result = "  0 - 1  "
         self.white_score = 0
         self.black_score = 2
-        self.UpdateRow("result",self.result)
+        self.UpdateRow("result", self.result)
 
     def WhiteWins(self):
         self.is_finished = True
         self.result = "  1 - 0  "
         self.white_score = 2
         self.black_score = 0
-        self.UpdateRow("result",self.result)
+        self.UpdateRow("result", self.result)
 
     def Draw(self):
         self.is_finished = True
         self.result = "1/2 - 1/2"
         self.black_score = 1
         self.white_score = 1
-        self.UpdateRow("result",self.result)
+        self.UpdateRow("result", self.result)

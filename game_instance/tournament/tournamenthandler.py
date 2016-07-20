@@ -4,6 +4,7 @@ handles processing and maintenance of the list of tournaments
 import cts2.application.util.pkg as pkg
 import cts2.database.tournamentnameinterface as tournamentnameinterface
 import cts2.game_instance.tournament.drrinvitational as drrinvitational
+import cts2.game_instance.tournament.matchinvitational as matchinvitational
 import random
 
 
@@ -47,16 +48,26 @@ class tournamenthandler(pkg.pkg):
             ]
         )
 
-    def CreateTournament(self, start_date, offset=True):
+    def CreateTournament(self, start_date, type="drr", offset=True):
         if offset:
             start_date += self.api.Call("get_current_julian")
         name = tournamentnameinterface.GenRandTournamentName()
-        new_tournament = drrinvitational.drrinvitational(
-            name,
-            start_date,
-            self.default_options["round_robin_player_range"]
-        )
-        self.tournament_list.append(new_tournament)
+        new_tournament = None
+        if type == "drr":
+            name += " drr"
+            new_tournament = drrinvitational.drrinvitational(
+                name,
+                start_date,
+                self.default_options["round_robin_player_range"]
+            )
+        elif type == "match":
+            name += " match"
+            new_tournament = matchinvitational.matchinvitational(
+                name,
+                start_date
+            )
+        if new_tournament is not None:
+            self.tournament_list.append(new_tournament)
         return new_tournament
 
     def CreateRandomTournament(self):
@@ -119,16 +130,23 @@ class tournamenthandler(pkg.pkg):
         exp_count = player_count / self.default_options["tournament_rate"]
         t_diff = exp_count - upc_t_count
         if t_diff > 0:
-            num_tournaments = abs(random.normalvariate(0, t_diff))
+            num_tournaments = int(abs(random.normalvariate(0, t_diff)))
             start_date_mean = (
                 self.default_options["tourn_buff_range"] / 2
             ) + self.default_options["tourn_buff_lookahead"]
-            for t in range(int(num_tournaments)):
+            for t in range(num_tournaments):
                 start_date = int(random.normalvariate(start_date_mean, 5))
                 self.CreateTournament(start_date)
 
+    def TestMatchInvitationals(self):
+        num_tournaments = int(abs(random.normalvariate(10, 5)))
+        for t in range(num_tournaments):
+            start_date = int(random.normalvariate(50, 5))
+            self.CreateTournament(start_date, type="match")
+
     def WeeklyMaintenance(self, date):
         self.BufferTournaments()
+        self.TestMatchInvitationals()
 
     def DailyMaintenance(self, date):
         player_list = self.api.Call("get_player_list")

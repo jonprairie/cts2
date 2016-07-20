@@ -6,6 +6,7 @@ import cts2.application.util.row as row
 import playertournamenthandler
 import numgenerator
 
+
 class player(
     invitereceiver.invitereceiver,
     row.row
@@ -34,7 +35,7 @@ class player(
         self.player_type = player_type   #computer, human, bye
 
         self.tournament_invites = []
-        self.player_tournament_handler = playertournamenthandler.playertournamenthandler()
+        self.pth = playertournamenthandler.playertournamenthandler()
 
         invitereceiver.invitereceiver.__init__(self)
         row.row.__init__(
@@ -49,7 +50,7 @@ class player(
             )
         )
 
-    #Get Functions
+    # Get Functions
     def __str__(self):
         return self.last_name + ", " + self.first_name
 
@@ -65,7 +66,6 @@ class player(
             name = self.last_name + ", " + self.first_name
         else:
             name = self.first_name + " " + self.last_name
-
         return name
 
     def GetGender(self):
@@ -75,14 +75,14 @@ class player(
         return self.country
 
     def GetElo(self, strng=False):
-        """returns official elo"""
+        """returns official elo."""
         if strng:
             return "{0:.1f}".format(self.elo)
         else:
             return self.elo
 
     def GetLiveElo(self, strng=False):
-        """returns 'live' elo"""
+        """returns 'live' elo."""
         if strng:
             return "{0:.1f}".format(self.live_elo)
         else:
@@ -92,17 +92,15 @@ class player(
         return self.play_strength.GetPlayStrength()
 
     def NameLength(self):
-        """returns length of string returned by InvertName()"""
-
+        """returns length of string returned by InvertName()."""
         return len(self.InvertName())
 
     def InvertName(self):
-        """returns player's full name in "last, first" form"""
-
+        """returns player's full name in "last, first" form."""
         name = self.last_name + ", " + self.first_name
         return name
 
-    #Maintenance Functions
+    # Maintenance Functions
     def MonthlyMaintenance(self):
         self.UpdateElo()
 
@@ -110,9 +108,9 @@ class player(
         pass
 
     def DailyMaintenance(self):
-        self.ProcessTournamentInvites()
-        self.player_tournament_handler.TransferToOld()
-        self.player_tournament_handler.TransferToCurrent()
+        # self.ProcessTournamentInvites()
+        self.pth.TransferToOld()
+        self.pth.TransferToCurrent()
 
     def SetFederation(self, chess_federation):
         self.chess_federation = chess_federation
@@ -126,11 +124,17 @@ class player(
                 self.tournament_invites.remove(invite)
 
     def CancelTournament(self, t):
-        self.player_tournament_handler.CancelTournament(t)
+        self.pth.CancelTournament(t)
 
     def AddGame(self, game):
-        if not game in self.player_tournament_handler.GetGameList():
-            self.player_tournament_handler.AddGame(game)
+        if game not in self.pth.GetGameList():
+            self.pth.AddGame(game)
+
+    def AcceptCleanUp(self, inv):
+        """
+        overwrite this function from invitereceiver to add tournaments to list.
+        """
+        self.pth.AddNewTournament(inv.sender)
 
     def AddTournamentInvite(self, invite):
         self.tournament_invites.append(invite)
@@ -143,16 +147,16 @@ class player(
         self.live_elo += rating_adjustment
         self.UpdateRow("live_elo", self.GetLiveElo(strng=True))
 
-    # def EvaluateInvite(self, tournament):
-    #     """Evaluates an invitation from a tournament. Accepts or rejects the invite.
-    #     If the player accepts the invite, adds the tournament to the player's tournament
-    #     list"""
-    #
-    #     #For now it's a basic implementation that accepts most invites
-    #     if not self.player_tournament_handler.TournamentConflicts(tournament):
-    #         return 1
-    #     else:
-    #         return 0
+    def EvaluateInvite(self, inv):
+        """
+        Evaluates an invitation from a tournament. Accepts or rejects the
+        invite. If the player accepts the invite, adds the tournament to
+        the player's tournament list.
+        """
+        if not self.pth.TournamentConflicts(inv.sender):
+            return invitereceiver.invitereceiver.EvaluateInvite(self, inv)
+        else:
+            return 0
 
 #    def RegisterForTournaments(self, tournaments):
 #        """Takes a list of tournaments and chooses which of them to register for"""
@@ -160,5 +164,5 @@ class player(
 #        #Basic Implementation
 #        for t in tournaments:
 #            if t.IsOpen():
-#                if not self.player_tournament_handler.TournamentConflicts(t):
+#                if not self.pth.TournamentConflicts(t):
 #                    t.AddPlayer(self)

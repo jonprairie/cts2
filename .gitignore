@@ -29,6 +29,7 @@
 *.sql
 *.sqlite
 *.cts
+*.stats
 
 # OS generated files #
 ######################

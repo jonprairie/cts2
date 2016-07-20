@@ -57,8 +57,8 @@ class playerhandler(pkg.pkg):
     #        p.RegisterForTournaments(tournament_list)
 
     def DailyMaintenance(self, _):
-        # self.RegisterForTournaments()
         for p in self.player_list:
+            p.DailyMaintenance()
             p.ProcessInvites()
 
     def MonthlyMaintenance(self, _):
