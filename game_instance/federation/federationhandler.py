@@ -1,4 +1,4 @@
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
 import cts2.game_instance.federation.federation as federation
 import cts2.game_instance.federation.country as country
 

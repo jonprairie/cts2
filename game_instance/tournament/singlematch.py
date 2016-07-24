@@ -1,5 +1,5 @@
 import cts2.game_instance.tournament.tround as tround
-import cts2.application.util.stringtable as stringtable
+import cts2.util.stringtable as stringtable
 
 
 class singlematch:

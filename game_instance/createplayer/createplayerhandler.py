@@ -1,4 +1,4 @@
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
 import cts2.game_instance.createplayer.genplayer as genplayer
 
 

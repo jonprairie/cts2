@@ -1,6 +1,6 @@
 from pydoc import locate
 import packagelisting as pl
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
 
 
 class pkgloaderhandler(pkg.pkg):

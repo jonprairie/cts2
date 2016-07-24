@@ -1,7 +1,7 @@
 """
 game instance menu
 """
-import cts2.application.util.stringtable as stringtable
+import cts2.util.stringtable as stringtable
 import cts2.application.packages.menu.arch.node as node
 import cts2.application.packages.menu.arch.menudriver as menudriver
 import cts2.application.packages.display.screen.dynamicmenuscreen as dms
@@ -42,14 +42,17 @@ class gameinstancemenu:
         self.api.Call("advance_day")
 
     def TopPlayers(self):
-        self.player_list = self.api.Call(
-            "get_player_list"
+        # self.player_list = self.api.Call(
+        #     "get_player_list"
+        # )
+        player_list = self.api.Call(
+            "get_top_players_by_elo", 10
         )
         player_st = stringtable.stringtable(
             "Players",
-            self.player_list
+            player_list
         )
-        player_st.SortBy("elo", ascending=False)
+        # player_st.SortBy("elo", ascending=False)
         self.api.Call(
             "add_screen",
             popup.popup(player_st.ToString(row_num=10))

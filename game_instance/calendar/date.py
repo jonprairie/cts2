@@ -1,4 +1,4 @@
-import cts2.application.util.row as row
+import cts2.util.row as row
 
 class date(row.row):
     def __init__(self, date = 0, tournament_list = []):

@@ -1,5 +1,5 @@
 import cts2.application.events.messageevent as messageevent
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
 import os
 
 

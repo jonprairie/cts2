@@ -39,7 +39,7 @@ class eventhandler:
         ))
 
         # shouldn't be needed once all event processors implement
-        # the cts2.application.util.eventprocessor class
+        # the cts2.util.eventprocessor class
         for h in self.handler_registry.values():
             self.LinkEventHandler(h)
 

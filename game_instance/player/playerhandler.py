@@ -2,7 +2,8 @@
 handles processing and maintenance of the player list for the
 application.
 """
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
+import operator
 
 
 class playerhandler(pkg.pkg):
@@ -11,7 +12,10 @@ class playerhandler(pkg.pkg):
             self,
             api,
             "player_handler",
-            ["get_player_list"],
+            [
+                "get_player_list",
+                "get_top_players_by_elo"
+            ],
             [
                 "register_for_maintenance",
                 "gen_player_list",
@@ -43,8 +47,15 @@ class playerhandler(pkg.pkg):
             self.default_options["num_initial_cpu_players"]
         )
 
-    def GetPlayerList(self):
+    def GetPlayerList(self, index_fence=None):
         return self.GetPlayers()
+
+    def GetTopPlayersByElo(self, num_players):
+        return sorted(
+            self.GetPlayers(),
+            key=operator.attrgetter('elo'),
+            reverse=True
+        )[0:num_players]
 
     # Get Functions
     def GetPlayers(self):

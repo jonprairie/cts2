@@ -1,5 +1,5 @@
 import screen
-import cts2.application.util.misc as misc
+import cts2.util.misc as misc
 
 
 class areyousure(screen.screen):

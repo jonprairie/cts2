@@ -1,7 +1,7 @@
 """
 handles processing and maintenance of the list of tournaments
 """
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
 import cts2.database.tournamentnameinterface as tournamentnameinterface
 import cts2.game_instance.tournament.drrinvitational as drrinvitational
 import cts2.game_instance.tournament.matchinvitational as matchinvitational

@@ -1,4 +1,4 @@
-import cts2.application.util.stringtable as stringtable
+import cts2.util.stringtable as stringtable
 import cts2.game_instance.tournament.chessgame.game as game
 
 class tround:

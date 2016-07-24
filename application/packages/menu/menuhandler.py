@@ -1,4 +1,4 @@
-import cts2.application.util.pkg as pkg
+import cts2.util.pkg as pkg
 import arch.node as node
 import arch.menudriver as menudriver
 import cts2.application.packages.display.screen.areyousure as ays
