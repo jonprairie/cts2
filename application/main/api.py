@@ -42,6 +42,7 @@ class api:
                 print "  api traceback:"
                 traceback.print_exc()
                 print "-"*60
+                import pdb; pdb.set_trace()
             raise Exception('exit')
 
         return ret_value

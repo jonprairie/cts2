@@ -1,6 +1,7 @@
 import cts2.util.stringtable as stringtable
 import cts2.game_instance.tournament.chessgame.game as game
 
+
 class tround:
     """tournament round"""
 
@@ -31,6 +32,9 @@ class tround:
 
     def __str__(self):
         return str(self.round_st)
+
+    def ToString(self):
+        return str(self)
 
     def Simulate(self):
         self.is_finished = True

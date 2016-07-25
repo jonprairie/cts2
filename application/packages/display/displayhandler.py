@@ -1,13 +1,9 @@
-import cts2.application.events.messageevent as messageevent
 import cts2.util.pkg as pkg
 import os
 
 
 class displayhandler(pkg.pkg):
     def __init__(self, api):
-        self.read_sysin_ev = messageevent.messageevent(
-            "read_sysin"
-        )
         pkg.pkg.__init__(
             self,
             api,
