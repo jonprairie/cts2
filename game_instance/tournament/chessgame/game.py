@@ -74,3 +74,12 @@ class game(row.row):
         self.black_score = 1
         self.white_score = 1
         self.UpdateRow("result", self.result)
+
+    def GetResult(self):
+        return self.result_obj
+
+    def GetWhite(self):
+        return self.white
+
+    def GetBlack(self):
+        return self.black

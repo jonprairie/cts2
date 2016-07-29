@@ -27,7 +27,7 @@ class sidescrollwidget(widget.widget):
     def ProcessesInput(self, inp):
         if widget.widget.ProcessesInput(self, inp):
             return True
-        elif self.widget_list[focus_index].ProcessesInput(inp):
+        elif self.widget_list[self.focus_index].ProcessesInput(inp):
             return True
         else:
             return False
@@ -36,7 +36,13 @@ class sidescrollwidget(widget.widget):
         if widget.widget.ProcessesInput(self, inp):
             widget.widget.ProcessInput(self, inp)
         else:
-            self.widget_list[self.focus_index].ProcessInput(inp)
+            self.DelegateInput(inp)
+
+    def DelegateInput(self, inp):
+        return self.GetFocusedWidget().ProcessInput(inp)
+
+    def GetFocusedWidget(self):
+        return self.widget_list[self.focus_index]
 
     def ScrollLeft(self):
         self.focus_index -= 1

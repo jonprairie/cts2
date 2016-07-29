@@ -1,4 +1,5 @@
 import cts2.util.row as row
+import history.tournamenthistory as th
 
 
 class tournament(row.row):
@@ -15,6 +16,7 @@ class tournament(row.row):
         self.num_player_range = num_player_range
         self.player_list = []
         self.date_range = []
+        self.tournament_history = None
 
         # state variables
         self.started = False
@@ -50,6 +52,9 @@ class tournament(row.row):
     def GetDateRange(self):
         return self.date_range
 
+    def GetStandings(self):
+        return self.tournament_history.GetStandings()
+
     def Conflicts(self, t):
         if (set(self.GetDateRange()) & set(t.GetDateRange())):
             return True
@@ -62,7 +67,12 @@ class tournament(row.row):
             p.CancelTournament(self)
 
     def PlayRound(self):
+        if self.current_round_index == 0:
+            self.tournament_history = th.tournamenthistory(
+                self.player_list
+            )
         self.current_round.Simulate()
+        self.tournament_history.AddRound(self.current_round)
         self.current_round_index += 1
         if self.current_round_index == len(self.schedule):
             self.finished = True

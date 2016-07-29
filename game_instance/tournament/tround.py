@@ -33,6 +33,9 @@ class tround:
     def __str__(self):
         return str(self.round_st)
 
+    def GetGames(self):
+        return self.game_list
+
     def ToString(self):
         return str(self)
 
