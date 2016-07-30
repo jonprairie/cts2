@@ -6,6 +6,7 @@ import screens.screen as screen
 import widgets.popupmsg as popupmsg
 import widgets.popupmsglist as popupmsglist
 import widgets.scrollablelist as scrollablelist
+import widgets.searchcontainer as searchcontainer
 import widgets.sidescrollwidget as sidescrollwidget
 
 
@@ -16,8 +17,9 @@ class screenhandler(pkg.pkg):
             api,
             "screen_handler",
             [
-                "build_tournament_screen"
-            ],
+                "build_tournament_screen",
+                "build_search_player_screen"
+            ]
             []
         )
 
@@ -48,6 +50,17 @@ class screenhandler(pkg.pkg):
         scr = screen.screen(
             "Tournament Display",
             [ssw]
+        )
+        scr.AddKeyDict(dict([("x", scr.MakeExit)]))
+        return scr
+
+    def BuildSearchPlayerScreen(self, player_list):
+        sc_w = searchcontainer.searchcontainer(
+            "player", player_list, lambda p: p.InvertName()
+        )
+        scr = screen.screen(
+            "Search Player List",
+            [sc_w]
         )
         scr.AddKeyDict(dict([("x", scr.MakeExit)]))
         return scr

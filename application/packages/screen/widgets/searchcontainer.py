@@ -29,6 +29,6 @@ class searchcontainer(
         res = sidescrollwidget.sidescrollwidget.DelegateInput(
             self, inp
         )
-        if self.GetFocusedWidget() is self.search_list_w:
+        if res and self.GetFocusedWidget() is self.search_list_w:
             self.scroll_list_w.SetDispList(res)
             self.ScrollRight()

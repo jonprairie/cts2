@@ -23,6 +23,7 @@ class gameinstancemenu:
                 ("calendar", self.Calendar),
                 ("players", self.SendPlayerScreen),
                 ("top players", self.TopPlayers),
+                ("search players", self.SendPlayerSearchScreen),
                 ("tournaments", self.SendTournamentScreen),
                 ("save game", self.SaveGame),
                 ("exit", self.MakeExit)
@@ -57,6 +58,14 @@ class gameinstancemenu:
             "add_screen",
             popup.popup(player_st.ToString(row_num=10))
         )
+
+    def SendPlayerSearchScreen(self):
+        player_list = self.api.Call("get_player_list")
+        scr = self.api.Call(
+            "build_search_player_screen",
+            player_list
+        )
+        self.api.Call("add_screen", scr)
 
     def SendPlayerScreen(self):
         player_list = self.api.Call("get_player_list")
