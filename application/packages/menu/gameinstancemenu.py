@@ -43,9 +43,6 @@ class gameinstancemenu:
         self.api.Call("advance_day")
 
     def TopPlayers(self):
-        # self.player_list = self.api.Call(
-        #     "get_player_list"
-        # )
         player_list = self.api.Call(
             "get_top_players_by_elo", 10
         )
@@ -63,7 +60,8 @@ class gameinstancemenu:
         player_list = self.api.Call("get_player_list")
         scr = self.api.Call(
             "build_search_player_screen",
-            player_list
+            player_list,
+            self.DisplayPlayer
         )
         self.api.Call("add_screen", scr)
 

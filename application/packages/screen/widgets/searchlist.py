@@ -15,7 +15,11 @@ class searchlist(widget.widget):
         widget.widget.__init__(self, name)
 
     def ProcessesInput(self, inp):
-        return True
+        try:
+            re.compile(inp)
+            return True
+        except re.error:
+            return False
 
     def ProcessInput(self, inp):
         return [

@@ -19,7 +19,7 @@ class screenhandler(pkg.pkg):
             [
                 "build_tournament_screen",
                 "build_search_player_screen"
-            ]
+            ],
             []
         )
 
@@ -54,9 +54,11 @@ class screenhandler(pkg.pkg):
         scr.AddKeyDict(dict([("x", scr.MakeExit)]))
         return scr
 
-    def BuildSearchPlayerScreen(self, player_list):
+    def BuildSearchPlayerScreen(
+        self, player_list, send_player_screen
+    ):
         sc_w = searchcontainer.searchcontainer(
-            "player", player_list, lambda p: p.InvertName()
+            "player", player_list, send_player_screen
         )
         scr = screen.screen(
             "Search Player List",
