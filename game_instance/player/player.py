@@ -41,8 +41,7 @@ class player(
         row.row.__init__(
             self,
             dict(
-                last=self.last_name,
-                first=self.first_name,
+                player=self.InvertName(),
                 age=self.age,
                 country=self.country.GetShortName(),
                 elo=self.GetElo(strng=True),

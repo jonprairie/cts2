@@ -48,7 +48,7 @@ class playerresult(row.row):
 
     def AddGame(self, g):
         self.game_list.append(g)
-        if self is g.GetWhite():
+        if self.player is g.GetWhite():
             self.total_score += g.GetResult().WhiteResult()
         else:
             self.total_score += g.GetResult().BlackResult()
