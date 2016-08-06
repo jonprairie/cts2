@@ -18,7 +18,8 @@ class tournamenthandler(pkg.pkg):
                 "create_tournament",
                 "create_random_tournament",
                 "get_current_tournaments",
-                "get_future_tournaments"
+                "get_future_tournaments",
+                "get_tournament_list"
             ],
             [
                 "register_for_maintenance",
@@ -106,6 +107,9 @@ class tournamenthandler(pkg.pkg):
             lambda t: not t.started,
             self.tournament_list
         )
+
+    def GetTournamentList(self):
+        return self.tournament_list
 
     def SendInvites(self, t, player_list):
         random.shuffle(

@@ -12,7 +12,7 @@ import cts2.application.packages.display.screen.listmenu as listmenu
 
 class gameinstancemenu:
     def __init__(self, api):
-        self.menu_screen, self.tourn_scr = self.BuildMenu()
+        self.menu_screen, self.tourn_scr, self.player_scr = self.BuildMenu()
         self.api = api
 
     def BuildMenu(self):
@@ -21,9 +21,7 @@ class gameinstancemenu:
             dict([
                 ("advance day", self.AdvanceDay),
                 ("calendar", self.Calendar),
-                ("players", self.SendPlayerScreen),
-                ("top players", self.TopPlayers),
-                ("search players", self.SendPlayerSearchScreen),
+                ("players", self.SendPlayerScreenTopLevel),
                 ("tournaments", self.SendTournamentScreen),
                 ("save game", self.SaveGame),
                 ("exit", self.MakeExit)
@@ -34,13 +32,25 @@ class gameinstancemenu:
             "Chess Tournament Sim - Tournaments",
             dict([
                 ("current tournaments", self.CurrentTournaments),
-                ("future tournaments", self.FutureTournaments)
+                ("future tournaments", self.FutureTournaments),
+                ("search tournaments", self.SendTournamentSearchScreen)
             ])
         )
-        return temp_scr, tourn_scr
+        player_scr = dms.dynamicmenuscreen(
+            "Chess Tournament Sim - Players",
+            dict([
+                ("top players", self.TopPlayers),
+                ("search players", self.SendPlayerSearchScreen),
+                ("player list", self.SendPlayerScreen)
+            ])
+        )
+        return temp_scr, tourn_scr, player_scr
 
     def AdvanceDay(self):
         self.api.Call("advance_day")
+
+    def SendPlayerScreenTopLevel(self):
+        self.api.Call("add_screen", self.player_scr)
 
     def TopPlayers(self):
         player_list = self.api.Call(
@@ -97,6 +107,15 @@ class gameinstancemenu:
 
     def SendTournamentScreen(self):
         self.api.Call("add_screen", self.tourn_scr)
+
+    def SendTournamentSearchScreen(self):
+        tournament_list = self.api.Call("get_tournament_list")
+        scr = self.api.Call(
+            "build_tournament_search_screen",
+            tournament_list,
+            self.DisplayTournament
+        )
+        self.api.Call("add_screen", scr)
 
     def CurrentTournaments(self):
         tournament_list = self.api.Call(
