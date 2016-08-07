@@ -45,4 +45,4 @@ class tournamenthistory:
             return self.history_snapshots[key]
 
     def GetLeader(self):
-        return sorted(self.pr_dict.values())[-1]
+        return sorted(self.pr_dict.values())[-1].player

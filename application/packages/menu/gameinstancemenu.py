@@ -33,6 +33,7 @@ class gameinstancemenu:
             dict([
                 ("current tournaments", self.CurrentTournaments),
                 ("future tournaments", self.FutureTournaments),
+                ("finished tournaments", self.FinishedTournaments),
                 ("search tournaments", self.SendTournamentSearchScreen)
             ])
         )
@@ -60,7 +61,6 @@ class gameinstancemenu:
             "Players",
             player_list
         )
-        # player_st.SortBy("elo", ascending=False)
         self.api.Call(
             "add_screen",
             popup.popup(player_st.ToString(row_num=10))
@@ -139,18 +139,18 @@ class gameinstancemenu:
         )
         self.api.Call("add_screen", tournament_screen)
 
+    def FinishedTournaments(self):
+        fin_tournament_list = self.api.Call(
+            "get_finished_tournaments"
+        )
+        tournament_screen = listmenu.listmenu(
+            "finished tournaments",
+            fin_tournament_list,
+            self.DisplayTournament
+        )
+        self.api.Call("add_screen", tournament_screen)
+
     def DisplayTournament(self, t):
-        '''TODO: add dedicated tournament display scree'''
-        # strg = "\n".join(
-        #     [
-        #         "tournament: " + t.name,
-        #         "starts: " + str(t.start_julian_date),
-        #         "player list:\n" + "\n".join(
-        #             [str(p) for p in t.player_list]
-        #         )
-        #     ]
-        # )
-        # self.api.Call("add_screen", popup.popup(strg))
         self.api.Call(
             "add_screen",
             self.api.Call("build_tournament_screen", t)

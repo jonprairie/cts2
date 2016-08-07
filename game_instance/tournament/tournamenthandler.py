@@ -19,7 +19,8 @@ class tournamenthandler(pkg.pkg):
                 "create_random_tournament",
                 "get_current_tournaments",
                 "get_future_tournaments",
-                "get_tournament_list"
+                "get_tournament_list",
+                "get_finished_tournaments"
             ],
             [
                 "register_for_maintenance",
@@ -78,6 +79,12 @@ class tournamenthandler(pkg.pkg):
     def GetCurrentTournaments(self):
         return filter(
             lambda t: t.started and not t.finished,
+            self.tournament_list
+        )
+
+    def GetFinishedTournaments(self):
+        return filter(
+            lambda t: t.finished,
             self.tournament_list
         )
 

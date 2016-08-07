@@ -33,6 +33,8 @@ class screenhandler(pkg.pkg):
             "tournament: " + t.name,
             "starts: " + str(t.start_julian_date)
         ])
+        if t.finished:
+            t_desc += ("\nchampion: " + t.GetChampion().InvertName())
         t_desc_w = popupmsg.popupmsg(t_desc)
         if t.started:
             t_sch_w = scrollablelist.scrollablelist(

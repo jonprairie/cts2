@@ -17,6 +17,7 @@ class tournament(row.row):
         self.player_list = []
         self.date_range = []
         self.tournament_history = None
+        self.champion = None
 
         # state variables
         self.started = False
@@ -34,6 +35,9 @@ class tournament(row.row):
 
     def __str__(self):
         return self.RowStr()
+
+    def GetChampion(self):
+        return self.champion
 
     def RowStr(self):
         return "tournament." + self.name
@@ -76,6 +80,7 @@ class tournament(row.row):
         self.current_round_index += 1
         if self.current_round_index == len(self.schedule):
             self.finished = True
+            self.champion = self.tournament_history.GetLeader()
         else:
             self.current_round = self.schedule[
                 self.current_round_index
