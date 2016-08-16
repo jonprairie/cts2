@@ -2,8 +2,9 @@ import random
 
 
 class tournamentdirector:
-    def __init__(self, api):
+    def __init__(self, api, country):
         self.api = api
+        self.country = country
         self.start_julian_date = random.randint(1, 365)
         self.tournament_list = []
 
@@ -13,7 +14,8 @@ class tournamentdirector:
             self.tournament_list.append(
                 self.api.CreateTournament(
                     self.start_julian_date,
-                    offset=False
+                    offset=False,
+                    country=self.country
                 )
             )
 

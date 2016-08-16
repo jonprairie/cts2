@@ -1,5 +1,6 @@
 import cts2.util.pkg as pkg
 import cPickle
+import sys
 import os
 
 
@@ -23,6 +24,7 @@ class persistencehandler(pkg.pkg):
         )
 
     def SaveGame(self):
+        sys.setrecursionlimit(10000)
         full_path = self.default_options["save_game_path"] + "save.cts"
         try:
             os.remove(full_path)

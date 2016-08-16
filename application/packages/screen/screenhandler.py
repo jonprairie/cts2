@@ -1,6 +1,7 @@
 """
 interface for creating screens
 """
+import collections
 import cts2.util.pkg as pkg
 import screens.screen as screen
 import widgets.popupmsg as popupmsg

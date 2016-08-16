@@ -50,10 +50,13 @@ class tournamenthandler(pkg.pkg):
             ]
         )
 
-    def CreateTournament(self, start_date, type="drr", offset=True):
+    def CreateTournament(
+        self, start_date, type="drr", offset=True,
+        country=None
+    ):
         if offset:
             start_date += self.api.Call("get_current_julian")
-        name = tournamentnameinterface.GenRandTournamentName()
+        name = self.CreateTournamentName(country=country)
         new_tournament = None
         if type == "drr":
             name += " drr"
@@ -71,6 +74,26 @@ class tournamenthandler(pkg.pkg):
         if new_tournament is not None:
             self.tournament_list.append(new_tournament)
         return new_tournament
+
+    def CreateTournamentName(self, country=None):
+        ctry_vs_city = 1
+        if country is not None:
+            if random.randint(0, 10) < 2:
+                ctry_vs_city = 0
+        if ctry_vs_city == 1:
+            noun = self.api.Call("get_random_city", country=country)
+        else:
+            noun = country
+        modifiers = ["chess", "", ""]
+        suffixes = [
+            "classic", "grand prix", "championship",
+            "tournament", "shoot out", "double round robin",
+            "match", "invitational"
+        ]
+        return (
+            str(noun) + " " + random.choice(modifiers) +
+            " " + random.choice(suffixes)
+        )
 
     def CreateRandomTournament(self):
         start_date = random.randint(15, 365)
