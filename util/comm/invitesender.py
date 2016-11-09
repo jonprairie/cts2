@@ -9,12 +9,20 @@ class invitesender:
         self.open_invites = []
         self.players_invited = []
 
-    def SendInvite(self, p):
+        self.player_list = []
+
+    # TODO: fix invites, this is a bit hackish
+    def SendInvite(self, p, inviter=None):
+        if inviter is None:
+            inviter = self
+            sender_proxy = None
+        else:
+            sender_proxy = self
         if not self.InvitesFull():
             if p not in self.players_invited:
                 self.players_invited.append(p)
                 if self.Thresher(p):
-                    inv = invite.invite(self, p)
+                    inv = invite.invite(inviter, p, sender_proxy=sender_proxy)
                     p.AddInvite(inv)
                     self.open_invites.append(inv)
                     return True
@@ -42,3 +50,6 @@ class invitesender:
 
     def DeclineInvitation(self, inv):
         self.open_invites.remove(inv)
+
+    def AddPlayer(self, player):
+        self.player_list.append(player)

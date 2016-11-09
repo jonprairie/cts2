@@ -4,32 +4,32 @@ import history.tournamenthistory as th
 
 class tournament(row.row):
     def __init__(
-        self,
-        name,
-        start_julian_date,
-        num_player_range
+            self,
+            name,
+            start_julian_date
     ):
 
         # tournament variables
         self.name = name
-        self.start_julian_date = start_julian_date
-        self.num_player_range = num_player_range
         self.player_list = []
+        self.start_julian_date = start_julian_date
         self.date_range = []
-        self.tournament_history = None
-        self.champion = None
-
-        # state variables
+        self.num_rounds = 0
         self.started = False
         self.finished = False
         self.cancel = False
+        # may need to inject history if we end up having multiple
+        # tie-breaker definitions etc.
+        self.history = None
+        # move to history?
+        self.champion = None
 
         row.row.__init__(
             self,
             dict(
                 name=self.name,
                 players=len(self.player_list),
-                start_date=start_julian_date
+                start_date=self.start_julian_date
             )
         )
 
@@ -40,60 +40,58 @@ class tournament(row.row):
         return self.champion
 
     def RowStr(self):
-        return "tournament." + self.name
+        return self.name
+
+    def IsCancelled(self):
+        return self.cancel
+
+    def IsCurrent(self):
+        return self.started and not self.finished
 
     def IsFinished(self):
         return self.finished
 
-    def AddPlayer(self, p):
-        if p not in self.player_list:
-            self.player_list.append(p)
-        self.UpdateRow("players", len(self.player_list))
-
-    def SetDateRange(self, date_range):
-        self.date_range = date_range
+    def GetNumPlayers(self):
+        return len(self.player_list)
 
     def GetDateRange(self):
         return self.date_range
 
-    def GetStandings(self):
-        return self.tournament_history.GetStandings()
+    def PlaysToday(self, date):
+        return date in self.date_range
 
-    def Conflicts(self, t):
-        if (set(self.GetDateRange()) & set(t.GetDateRange())):
-            return True
-        else:
-            return False
+    def AddPlayer(self, player):
+        if player not in self.player_list:
+            self.player_list.append(player)
+        self.UpdateRow("players", len(self.player_list))
+
+    def AddPlayerList(self, player_list):
+        for player in player_list:
+            self.AddPlayer(player)
+
+    def GetStandings(self):
+        return self.history.GetStandings()
+
+    def Conflicts(self, other_tourn):
+        return (
+            set(self.GetDateRange()) & set(other_tourn.GetDateRange())
+        )
 
     def CancelTournament(self):
         self.cancel = True
-        for p in self.player_list:
-            p.CancelTournament(self)
+        for player in self.player_list:
+            player.CancelTournament(self)
 
-    def PlayRound(self):
-        if self.current_round_index == 0:
-            self.tournament_history = th.tournamenthistory(
-                self.player_list
-            )
-        self.current_round.Simulate()
-        self.tournament_history.AddRound(self.current_round)
-        self.current_round_index += 1
-        if self.current_round_index == len(self.schedule):
-            self.finished = True
-            self.champion = self.tournament_history.GetLeader()
-        else:
-            self.current_round = self.schedule[
-                self.current_round_index
-            ]
+    def Start(self, player_list, num_rounds):
+        self.started = True
+        self.AddPlayerList(player_list)
+        self.history = th.tournamenthistory(
+            player_list
+        )
+        self.num_rounds = num_rounds
+        self.date_range = [
+            self.start_julian_date+offset for offset in range(self.num_rounds)
+        ]
 
-    def HasEnoughPlayers(self):
-        return self.num_player_range[0] <= len(self.player_list)
-
-    def IsCurrent(self):
-        return self.started and not self.finished and not self.cancel
-
-    def IsDoubleRoundRobin(self):
-        return False
-
-    def IsInvitational(self):
-        return False
+    def Finish(self):
+        self.finished = True

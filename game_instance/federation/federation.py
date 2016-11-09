@@ -1,4 +1,3 @@
-import cts2.game_instance.federation.tournamentdirector as tournamentdirector
 import random
 
 
@@ -9,8 +8,5 @@ class federation:
 
         self.td_list = []
         for i in range(random.randint(1, 4)):
-            temp_td = tournamentdirector.tournamentdirector(
-                self.api,
-                self.country
-            )
+            temp_td = api.Call("create_tournament_director", country)
             self.td_list.append(temp_td)

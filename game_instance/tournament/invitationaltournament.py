@@ -1,25 +1,21 @@
+import cts2.util.comm.invitesender as invitesender
 import tournament
-import invitesender
 
-class invitationaltournament(
-    tournament.tournament,
-    invitesender.invitesender
-):
-
+class invitationaltournament:
     def __init__(
-        self,
-        name,
-        start_julian_date,
-        num_player_range
-    ):
-
-        invitesender.invitesender.__init__(
-            self,
-            num_player_range
-        )
-        tournament.tournament.__init__(
             self,
             name,
             start_julian_date,
+            num_player_range,
+            schedule
+    ):
+
+        self.invite_sender = invitesender.invitesender(
             num_player_range
+        )
+        self.tournament = tournament.tournament(
+            name,
+            start_julian_date,
+            num_player_range,
+            schedule
         )

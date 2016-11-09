@@ -3,8 +3,9 @@ handles processing and maintenance of the list of tournaments
 """
 import cts2.util.pkg as pkg
 import cts2.database.tournamentnameinterface as tournamentnameinterface
-import cts2.game_instance.tournament.drrinvitational as drrinvitational
-import cts2.game_instance.tournament.matchinvitational as matchinvitational
+import tournament
+# import cts2.game_instance.tournament.drrinvitational as drrinvitational
+# import cts2.game_instance.tournament.matchinvitational as matchinvitational
 import random
 
 
@@ -35,10 +36,7 @@ class tournamenthandler(pkg.pkg):
         self.api.Call(
             "register_for_maintenance",
             self,
-            [
-                "daily",
-                "weekly"
-            ]
+            ["weekly"]
         )
         self.default_options = self.api.Call(
             "def_options",
@@ -60,16 +58,9 @@ class tournamenthandler(pkg.pkg):
         new_tournament = None
         if type == "drr":
             name += " drr"
-            new_tournament = drrinvitational.drrinvitational(
+            new_tournament = tournament.tournament(
                 name,
                 start_date,
-                self.default_options["round_robin_player_range"]
-            )
-        elif type == "match":
-            name += " match"
-            new_tournament = matchinvitational.matchinvitational(
-                name,
-                start_date
             )
         if new_tournament is not None:
             self.tournament_list.append(new_tournament)
@@ -141,14 +132,14 @@ class tournamenthandler(pkg.pkg):
     def GetTournamentList(self):
         return self.tournament_list
 
-    def SendInvites(self, t, player_list):
-        random.shuffle(
-            player_list
-        )
-        for p in player_list:
-            t.SendInvite(p)
-            if t.InvitesFull():
-                break
+    # def SendInvites(self, t, player_list):
+    #     random.shuffle(
+    #         player_list
+    #     )
+    #     for p in player_list:
+    #         t.SendInvite(p)
+    #         if t.InvitesFull():
+    #             break
 
     def BufferTournaments(self):
         """
@@ -170,38 +161,15 @@ class tournamenthandler(pkg.pkg):
             ) + self.default_options["tourn_buff_lookahead"]
             for t in range(num_tournaments):
                 start_date = int(random.normalvariate(start_date_mean, 5))
-                self.CreateTournament(start_date)
+                self.api.Call("create_random_tournament_director")
+                # self.CreateTournament(start_date)
 
-    def TestMatchInvitationals(self):
-        num_tournaments = int(abs(random.normalvariate(10, 5)))
-        for t in range(num_tournaments):
-            start_date = int(random.normalvariate(50, 5))
-            self.CreateTournament(start_date, type="match")
+    # def TestMatchInvitationals(self):
+    #     num_tournaments = int(abs(random.normalvariate(10, 5)))
+    #     for t in range(num_tournaments):
+    #         start_date = int(random.normalvariate(50, 5))
+    #         self.CreateTournament(start_date, type="match")
 
     def WeeklyMaintenance(self, date):
         self.BufferTournaments()
-        self.TestMatchInvitationals()
-
-    def DailyMaintenance(self, date):
-        player_list = self.api.Call("get_player_list")
-        for t in self.tournament_list:
-            if not t.finished and not t.started and t.sends_invites:
-                self.SendInvites(t, player_list)
-            if int(t.start_julian_date) == int(date):
-                if t.HasEnoughPlayers():
-                    t.started = True
-                else:
-                    t.CancelTournament()
-            if t.started and not t.schedule_finished:
-                t.BuildSchedule()
-            if t.started and not t.finished:
-                t.PlayRound()
-            if not t.started and not t.cancel and (
-                int(date) > int(t.start_julian_date)
-            ):
-                self.api.Call(
-                    "log_msg",
-                    str(t) + " error, start date is " +
-                    str(t.start_julian_date) +
-                    " today is " + str(date)
-                )
+        # self.TestMatchInvitationals()
