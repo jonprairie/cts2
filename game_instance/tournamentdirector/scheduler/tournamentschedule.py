@@ -36,3 +36,12 @@ class tournamentschedule:
 
     def GetCurrentRound(self):
         return self.rounds[self.current_round_index]
+
+    def GetSchedule(self):
+        return self
+
+    def GetRounds(self):
+        return self.rounds
+
+    def GetNumRounds(self):
+        pass

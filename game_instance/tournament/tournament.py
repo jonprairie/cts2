@@ -51,6 +51,9 @@ class tournament(row.row):
     def IsCurrent(self):
         return self.started and not self.finished
 
+    def IsStarted(self):
+        return self.started
+
     def IsFinished(self):
         return self.finished
 
@@ -85,13 +88,14 @@ class tournament(row.row):
         for player in self.player_list:
             player.CancelTournament(self)
 
-    def Start(self, player_list, num_rounds):
+    def Start(self, player_list, schedule):
         self.started = True
         self.AddPlayerList(player_list)
         self.history = th.tournamenthistory(player_list)
-        self.num_rounds = num_rounds
+        self.schedule = schedule
         self.date_range = [
-            self.start_julian_date+offset for offset in range(self.num_rounds)
+            self.start_julian_date+offset
+            for offset in range(self.GetSchedule().GetNumRounds())
         ]
 
     def Finish(self):
