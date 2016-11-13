@@ -3,6 +3,8 @@ import random
 
 class tournamentdirector:
     def __init__(self, tournament, recruiter, scheduler):
+        # TODO: separate scheduler and schedule, then inject schedule
+        # into tournament
         self.tournament = tournament
         self.recruiter = recruiter
         self.scheduler = scheduler
@@ -25,8 +27,6 @@ class tournamentdirector:
                 if self.tournament.PlaysToday(date):
                     self.scheduler.BuildRoundSchedule()
                     self.PlayRound()
-            elif not self.tournament.finished:
-                self.tournament.Finish()
 
     def PlayRound(self):
         current_round = self.scheduler.GetCurrentRound()
@@ -34,4 +34,5 @@ class tournamentdirector:
         self.tournament.history.AddRound(current_round)
         if self.scheduler.IsFinished():
             self.tournament.champion = self.tournament.history.GetLeader()
+            self.tournament.Finish()
 

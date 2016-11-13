@@ -23,7 +23,7 @@ class tournamentdirectorhandler(pkg.pkg):
         self.td_list = []
 
     def Activate(self):
-        self.api.Call("register_for_maintenance", self, ["weekly"])
+        self.api.Call("register_for_maintenance", self, ["daily"])
         self.default_options = self.api.Call(
             "def_options",
             ["round_robin_player_range"]
@@ -58,7 +58,7 @@ class tournamentdirectorhandler(pkg.pkg):
         self.td_list.append(temp_td)
         return temp_td
 
-    def WeeklyMaintenance(self, dte):
+    def DailyMaintenance(self, dte):
         for td in self.td_list:
             td.Maintenance(dte)
 

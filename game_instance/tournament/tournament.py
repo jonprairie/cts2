@@ -39,6 +39,9 @@ class tournament(row.row):
     def GetChampion(self):
         return self.champion
 
+    def GetSchedule(self):
+        return self.schedule
+
     def RowStr(self):
         return self.name
 
@@ -85,9 +88,7 @@ class tournament(row.row):
     def Start(self, player_list, num_rounds):
         self.started = True
         self.AddPlayerList(player_list)
-        self.history = th.tournamenthistory(
-            player_list
-        )
+        self.history = th.tournamenthistory(player_list)
         self.num_rounds = num_rounds
         self.date_range = [
             self.start_julian_date+offset for offset in range(self.num_rounds)
