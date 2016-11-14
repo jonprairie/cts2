@@ -17,7 +17,7 @@ class invitereceiver:
                 self.DeclineInvitation(inv)
 
     def AcceptInvitation(self, inv):
-        inv.sender.AcceptInvitation(inv)
+        inv.Accept()
         self.accepted_invites.append(inv)
         self.pending_invites.remove(inv)
         self.AcceptCleanUp(inv)
@@ -26,7 +26,7 @@ class invitereceiver:
         pass
 
     def DeclineInvitation(self, inv):
-        inv.sender.DeclineInvitation(inv)
+        inv.Decline()
         self.pending_invites.remove(inv)
 
     def EvaluateInvite(self, inv):

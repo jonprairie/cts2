@@ -40,7 +40,7 @@ class screenhandler(pkg.pkg):
         if t.started:
             t_sch_w = scrollablelist.scrollablelist(
                 "schedule:",
-                t.schedule,
+                t.GetSchedule().GetRounds(),
                 page_size=1
             )
             t_stand_w = popupmsg.popupmsg(t.GetStandings().ToString())

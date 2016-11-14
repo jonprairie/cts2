@@ -1,7 +1,7 @@
 """
 representation of a chess player
 """
-import cts2.game_instance.player.invitereceiver as invitereceiver
+import cts2.util.comm.invitereceiver as invitereceiver
 import cts2.util.row as row
 import playertournamenthandler
 import numgenerator
