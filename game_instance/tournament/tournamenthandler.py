@@ -79,7 +79,8 @@ class tournamenthandler(pkg.pkg):
         suffixes = [
             "classic", "grand prix", "championship",
             "tournament", "shoot out", "double round robin",
-            "match", "invitational"
+            "match", "invitational", "knockout", "challenge",
+            "open", "closed"
         ]
         return (
             str(noun) + " " + random.choice(modifiers) +

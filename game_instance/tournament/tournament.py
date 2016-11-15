@@ -79,9 +79,7 @@ class tournament(row.row):
         return self.history.GetStandings()
 
     def Conflicts(self, other_tourn):
-        return (
-            set(self.GetDateRange()) & set(other_tourn.GetDateRange())
-        )
+        return set(self.GetDateRange()) & set(other_tourn.GetDateRange())
 
     def CancelTournament(self):
         self.cancel = True
@@ -96,6 +94,11 @@ class tournament(row.row):
         self.date_range = [
             self.start_julian_date+offset
             for offset in range(self.GetSchedule().GetNumRounds())
+        ]
+
+    def SetWorstCaseDateRange(self, max_players):
+        self.date_range = [
+            self.start_julian_date+offset for offset in range(max_players)
         ]
 
     def Finish(self):

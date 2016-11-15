@@ -8,6 +8,8 @@ import cts2.application.packages.display.screen.dynamicmenuscreen as dms
 import cts2.application.packages.display.screen.areyousure as ays
 import cts2.application.packages.display.screen.popup as popup
 import cts2.application.packages.display.screen.listmenu as listmenu
+import collections
+import pdb
 
 
 class gameinstancemenu:
@@ -24,7 +26,8 @@ class gameinstancemenu:
                 ("players", self.SendPlayerScreenTopLevel),
                 ("tournaments", self.SendTournamentScreen),
                 ("save game", self.SaveGame),
-                ("exit", self.MakeExit)
+                ("exit", self.MakeExit),
+                ("debug", self.Debug)
             ]),
             add_exit=False
         )
@@ -177,3 +180,22 @@ class gameinstancemenu:
         '''TODO: Save game on exit'''
         self.last_chance.MakeExit()
         self.menu_screen.MakeExit()
+
+    def Debug(self):
+        pdb.set_trace()
+
+    def FindTournamentConflicts(self):
+        # useful for verifying that players aren't double-booking
+        # tournaments
+        player_list = self.api.Call("get_player_list")
+        ret_cnt_list = []
+        for player in player_list:
+            cnt = collections.Counter()
+            for tournament in player.pth.GetFutureTournaments():
+                for date in tournament.GetDateRange():
+                    cnt[date] += 1
+            ret_cnt_list.append((player.last_name+", "+player.first_name, cnt))
+        flat_tc = [(p,d,n) for (p,t) in ret_cnt_list for (d,n) in t.items()]
+        tc_error = [x for x in flat_tc if x[2] > 1]
+        return ret_cnt_list, tc_error
+

@@ -6,6 +6,9 @@ class tournamentdirector:
         self.tournament = tournament
         self.recruiter = recruiter
         self.scheduler = scheduler
+        self.tournament.SetWorstCaseDateRange(
+            self.recruiter.GetMaxPlayers()
+        )
 
     def Maintenance(self, date):
         if int(self.tournament.start_julian_date) == int(date):
@@ -25,6 +28,16 @@ class tournamentdirector:
                 if self.tournament.PlaysToday(date):
                     self.tournament.GetSchedule().BuildRoundSchedule()
                     self.PlayRound()
+                elif int(date) > max(self.tournament.GetDateRange()):
+                    raise Exception(
+                        """%s: current date (%s) is outside tournament
+                        date range %s""" % (
+                                self.tournament.name,
+                                str(date),
+                                str(self.tournament.GetDateRange()
+                            )
+                        )
+                    )
 
     def PlayRound(self):
         current_round = self.tournament.GetSchedule().GetCurrentRound()
