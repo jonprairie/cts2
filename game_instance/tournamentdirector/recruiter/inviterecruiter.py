@@ -1,6 +1,7 @@
 import cts2.util.comm.invitesender as invitesender
 import random
 
+
 class inviterecruiter(invitesender.invitesender):
     def __init__(self, tournament, player_range, player_polling_function):
         invitesender.invitesender.__init__(self, player_range)
@@ -25,3 +26,7 @@ class inviterecruiter(invitesender.invitesender):
 
     def GetMaxPlayers(self):
         return self.player_range[1]
+
+    def SetPlayerRange(self, player_range):
+        self.player_range = player_range
+        self.max_invites = player_range[1]

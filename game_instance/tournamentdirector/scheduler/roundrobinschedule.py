@@ -23,7 +23,7 @@ class roundrobinschedule(tournamentschedule.tournamentschedule):
             random.shuffle(self.rounds)
             # TODO: fix this hack :/
             for round_num, round in enumerate(self.rounds):
-                round.round_num = round_num
+                round.round_num = round_num + 1
                 round.round_st = round.BuildStringTable()
 
     def GetNumRounds(self):
@@ -34,6 +34,13 @@ class roundrobinschedule(tournamentschedule.tournamentschedule):
         else:
             num_byes = 2
         return 2*(num_players+num_byes-1)
+
+    def GetMaxNumberRounds(self, max_players):
+        if max_players % 2 == 1:
+            num_byes = 1
+        else:
+            num_byes = 2
+        return 2*(max_players+num_byes-1)
 
     def BuildFullPairings(self, num_players):
         """

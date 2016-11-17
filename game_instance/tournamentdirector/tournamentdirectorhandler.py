@@ -5,6 +5,7 @@ import cts2.util.pkg as pkg
 import tournamentdirector
 import recruiter.inviterecruiter as inviterecruiter
 import scheduler.roundrobinschedule as roundrobinschedule
+import scheduler.matchschedule as matchschedule
 import random
 
 class tournamentdirectorhandler(pkg.pkg):
@@ -13,7 +14,10 @@ class tournamentdirectorhandler(pkg.pkg):
             self,
             api,
             "tournament_director_handler",
-            ["create_random_tournament_director"],
+            [
+                "create_random_tournament_director",
+                "get_tournament_director_list"
+            ],
             [
                 "register_for_maintenance",
                 "def_options"
@@ -47,7 +51,10 @@ class tournamentdirectorhandler(pkg.pkg):
         )
 
     def GetRandomScheduler(self):
-        return roundrobinschedule.roundrobinschedule()
+        if random.randint(0,1):
+            return roundrobinschedule.roundrobinschedule()
+        else:
+            return matchschedule.matchschedule(random.randint(4,10))
 
     def CreateTournamentDirector(self, tournament, recruiter, scheduler):
         temp_td = tournamentdirector.tournamentdirector(
@@ -62,3 +69,6 @@ class tournamentdirectorhandler(pkg.pkg):
         for td in self.td_list:
             td.Maintenance(dte)
 
+
+    def GetTournamentDirectorList(self):
+        return self.td_list

@@ -1,21 +1,20 @@
 class tournamentschedule:
-    def __init__(self):
+    def __init__(self, num_rounds=0):
         self.started  = False
         self.finished = False
         self.player_list = []
         self.rounds = []
-        self.num_rounds = 0
+        self.num_rounds = num_rounds
         self.current_round_index = 0
 
     def Start(self, player_list):
         self.player_list = player_list
-        self.SetNumRounds()
         self.started = True
 
     def BuildRoundSchedule(self):
         pass
 
-    def SetNumRounds(self):
+    def SetNumRounds(self, rounds):
         pass
 
     def SimulateCurrentRound(self):
@@ -45,3 +44,9 @@ class tournamentschedule:
 
     def GetNumRounds(self):
         pass
+
+    def GetMaxNumberRounds(self, max_players):
+        pass
+
+    def GetMandatoryPlayerRange(self):
+        return False

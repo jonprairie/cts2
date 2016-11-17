@@ -7,8 +7,14 @@ class tournamentdirector:
         self.recruiter = recruiter
         self.scheduler = scheduler
         self.tournament.SetWorstCaseDateRange(
-            self.recruiter.GetMaxPlayers()
+            self.scheduler.GetMaxNumberRounds(
+                self.recruiter.GetMaxPlayers()
+            )
         )
+        if self.scheduler.GetMandatoryPlayerRange():
+            self.recruiter.SetPlayerRange(
+                self.scheduler.GetMandatoryPlayerRange()
+            )
 
     def Maintenance(self, date):
         if int(self.tournament.start_julian_date) == int(date):

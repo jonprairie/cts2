@@ -96,9 +96,9 @@ class tournament(row.row):
             for offset in range(self.GetSchedule().GetNumRounds())
         ]
 
-    def SetWorstCaseDateRange(self, max_players):
+    def SetWorstCaseDateRange(self, max_rounds):
         self.date_range = [
-            self.start_julian_date+offset for offset in range(max_players)
+            self.start_julian_date+offset for offset in range(max_rounds)
         ]
 
     def Finish(self):
