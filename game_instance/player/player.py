@@ -16,8 +16,7 @@ class player(
     def __init__(
         self, first_name, last_name, age,
         gender="male", country=None, title=None,
-        elo=2500, play_strength=2500, fame=2500,
-        player_type="cpu"
+        elo=2500, play_strength=2500, fame=2500
     ):
 
         self.player_num = numgenerator.num_gen.GenNum()
@@ -31,8 +30,6 @@ class player(
         self.live_elo = float(elo)
         self.chess_federation = 0
         self.play_strength = play_strength
-
-        self.player_type = player_type   #computer, human, bye
 
         self.tournament_invites = []
         self.pth = playertournamenthandler.playertournamenthandler()
@@ -55,9 +52,6 @@ class player(
 
     def GetPlayerNum(self):
         return self.player_num
-
-    def GetType(self):
-        return self.player_type
 
     def GetName(self, invert=0):
         name = ""
@@ -99,13 +93,6 @@ class player(
         name = self.last_name + ", " + self.first_name
         return name
 
-    # Maintenance Functions
-    def MonthlyMaintenance(self):
-        self.UpdateElo()
-
-    def WeeklyMaintenance(self):
-        pass
-
     def DailyMaintenance(self):
         # self.ProcessTournamentInvites()
         self.pth.TransferToOld()
@@ -138,8 +125,11 @@ class player(
     def AddTournamentInvite(self, invite):
         self.tournament_invites.append(invite)
 
-    def UpdateElo(self):
-        self.elo = self.live_elo
+    def AddTournament(self, tournament):
+        self.pth.AddNewTournament(tournament)
+
+    def SetElo(self, elo):
+        self.elo = elo
         self.UpdateRow("elo", self.GetElo(strng=True))
 
     def UpdateLiveElo(self, rating_adjustment):

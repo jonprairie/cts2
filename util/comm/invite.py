@@ -1,17 +1,24 @@
 class invite:
-    def __init__(self, sender, receiver, sender_proxy=None):
+    def __init__(self, sender, receiver):
         self.sender = sender
-        self.sender_proxy = sender_proxy
         self.receiver = receiver
+        self.accepted = False
+        self.declined = False
 
     def Accept(self):
-        if self.sender_proxy:
-            self.sender_proxy.AcceptInvitation(self)
-        else:
-            self.sender.AcceptInvitation(self)
+        self.accepted = True
 
     def Decline(self):
-        if self.sender_proxy:
-            self.sender_proxy.DeclineInvitation(self)
-        else:
-            self.sender.DeclineInvitation(self)
+        self.declined = True
+
+    def IsAccepted(self):
+        return self.accepted
+
+    def IsDeclined(self):
+        return self.declined
+
+    def GetSender(self):
+        return self.sender
+
+    def GetReceiver(self):
+        return self.receiver

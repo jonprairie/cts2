@@ -13,33 +13,20 @@ class playerhandler(pkg.pkg):
             api,
             "player_handler",
             [
+                "create_random_player",
                 "get_player_list",
                 "get_top_players_by_elo"
             ],
-            [
-                "register_for_maintenance",
-                "gen_player_list",
-                "def_options"
-            ],
+            ["gen_player"],
             save_ind=True
         )
-        self.default_options = None
-        self.player_list = None
+        self.default_options = dict()
+        self.player_list = []
 
-    def Activate(self):
-        self.default_options = self.api.Call(
-            "def_options",
-            ["num_initial_cpu_players"]
-        )
-        self.player_list = self.InitPlayers()
-        self.api.Call(
-            "register_for_maintenance",
-            self,
-            [
-                "daily",
-                "monthly"
-            ]
-        )
+    def CreateRandomPlayer(self):
+        temp_player = self.api.Call("gen_player")
+        self.player_list.append(temp_player)
+        return temp_player
 
     def InitPlayers(self):
         return self.api.Call(
@@ -60,22 +47,6 @@ class playerhandler(pkg.pkg):
     # Get Functions
     def GetPlayers(self):
         return self.player_list
-
-    # Maintenance Functions
-    # def RegisterForTournaments(self):
-    #    tournament_list = self.tournament_handler.GetNewTournaments()
-    #    for p in self.player_list:
-    #        p.RegisterForTournaments(tournament_list)
-
-    def DailyMaintenance(self, _):
-        for p in self.player_list:
-            p.DailyMaintenance()
-            p.ProcessInvites()
-
-    def MonthlyMaintenance(self, _):
-        for p in self.player_list:
-            p.UpdateElo()
-
 
 def PlayerCMP(player_x, player_y):
     """returns -1 if player_x's elo is greater than player_y's

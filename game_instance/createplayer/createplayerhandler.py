@@ -25,6 +25,7 @@ class createplayerhandler(pkg.pkg):
         )
 
     def GenPlayer(self):
+        #TODO: move this to playerhandler
         return genplayer.GenPlayer(self.default_options)
 
     def GenPlayerList(self, num_players=1):

@@ -30,6 +30,7 @@ class tournamentdirector:
         if not self.tournament.IsCancelled():
             if not self.tournament.IsStarted():
                 self.recruiter.Recruit()
+                self.tournament.AddPlayerList(self.recruiter.GetRecruits())
             elif not self.tournament.IsFinished():
                 if self.tournament.PlaysToday(date):
                     self.tournament.GetSchedule().BuildRoundSchedule()
@@ -38,10 +39,9 @@ class tournamentdirector:
                     raise Exception(
                         """%s: current date (%s) is outside tournament
                         date range %s""" % (
-                                self.tournament.name,
-                                str(date),
-                                str(self.tournament.GetDateRange()
-                            )
+                            self.tournament.name,
+                            str(date),
+                            str(self.tournament.GetDateRange())
                         )
                     )
 

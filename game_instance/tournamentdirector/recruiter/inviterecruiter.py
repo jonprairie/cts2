@@ -1,20 +1,36 @@
-import cts2.util.comm.invitesender as invitesender
+import cts2.util.comm.invite as invite
 import random
 
 
-class inviterecruiter(invitesender.invitesender):
-    def __init__(self, tournament, player_range, player_polling_function):
-        invitesender.invitesender.__init__(self, player_range)
+class inviterecruiter:
+    def __init__(self, tournament, player_range, outbox, player_polling_fn):
+        self.player_range = player_range
         self.tournament = tournament
         self.player_range = player_range
-        self.player_polling_function = player_polling_function
+        self.outbox = outbox
+        self.player_polling_fn = player_polling_fn
+        self.open_invites = []
+        self.players_invited = []
+        self.player_list = []
 
     def Recruit(self):
+        self.CleanOpenInvites()
+        self.SendOpenInvites()
+
+    def CleanOpenInvites(self):
+        for inv in self.open_invites:
+            if inv.IsAccepted():
+                self.AddPlayer(inv.GetReceiver())
+                self.open_invites.remove(inv)
+            elif inv.IsDeclined():
+                self.open_invites.remove(inv)
+
+    def SendOpenInvites(self):
         while not self.InvitesFull():
             player = random.choice(
-                self.player_polling_function()
+                self.player_polling_fn()
             )
-            self.SendInvite(player, inviter=self.tournament)
+            self.SendInvite(self.tournament, player)
 
     def GetRecruits(self):
         return self.player_list
@@ -29,4 +45,26 @@ class inviterecruiter(invitesender.invitesender):
 
     def SetPlayerRange(self, player_range):
         self.player_range = player_range
-        self.max_invites = player_range[1]
+
+    def SendInvite(self, inviter, player):
+        if player not in self.players_invited:
+            self.players_invited.append(player)
+            if self.Thresher(player):
+                inv = invite.invite(
+                    inviter,
+                    player
+                )
+                self.outbox.SendMessage(player, inv)
+                self.open_invites.append(inv)
+                return True
+        return False
+
+    def Thresher(self, player):
+        return random.randint(1,100) < 35
+
+    def InvitesFull(self):
+        potential_players = len(self.open_invites) + len(self.player_list)
+        return potential_players >= self.GetMaxPlayers()
+
+    def AddPlayer(self, player):
+        self.player_list.append(player)

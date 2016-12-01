@@ -47,6 +47,7 @@ class tournamentdirectorhandler(pkg.pkg):
         return inviterecruiter.inviterecruiter(
             tournament,
             self.default_options["round_robin_player_range"],
+            self.api.Call("create_tournament_outbox", tournament),
             lambda: self.api.Call("get_player_list")
         )
 
