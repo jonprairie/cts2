@@ -28,13 +28,10 @@ class player(
         self.title = title              #player's title
         self.elo = float(elo)           #player's elo
         self.live_elo = float(elo)
-        self.chess_federation = 0
         self.play_strength = play_strength
 
-        self.tournament_invites = []
         self.pth = playertournamenthandler.playertournamenthandler()
 
-        invitereceiver.invitereceiver.__init__(self)
         row.row.__init__(
             self,
             dict(
@@ -101,29 +98,12 @@ class player(
     def SetFederation(self, chess_federation):
         self.chess_federation = chess_federation
 
-    def ProcessTournamentInvites(self):
-        for invite in self.tournament_invites[:]:
-            if self.EvaluateInvite(invite.GetInviter()):
-                invite.Accept()
-            else:
-                invite.Decline()
-                self.tournament_invites.remove(invite)
-
     def CancelTournament(self, t):
         self.pth.CancelTournament(t)
 
     def AddGame(self, game):
         if game not in self.pth.GetGameList():
             self.pth.AddGame(game)
-
-    def AcceptCleanUp(self, inv):
-        """
-        overwrite this function from invitereceiver to add tournaments to list.
-        """
-        self.pth.AddNewTournament(inv.sender)
-
-    def AddTournamentInvite(self, invite):
-        self.tournament_invites.append(invite)
 
     def AddTournament(self, tournament):
         self.pth.AddNewTournament(tournament)
@@ -135,23 +115,3 @@ class player(
     def UpdateLiveElo(self, rating_adjustment):
         self.live_elo += rating_adjustment
         self.UpdateRow("live_elo", self.GetLiveElo(strng=True))
-
-    def EvaluateInvite(self, inv):
-        """
-        Evaluates an invitation from a tournament. Accepts or rejects the
-        invite. If the player accepts the invite, adds the tournament to
-        the player's tournament list.
-        """
-        if not self.pth.TournamentConflicts(inv.sender):
-            return invitereceiver.invitereceiver.EvaluateInvite(self, inv)
-        else:
-            return 0
-
-#    def RegisterForTournaments(self, tournaments):
-#        """Takes a list of tournaments and chooses which of them to register for"""
-#
-#        #Basic Implementation
-#        for t in tournaments:
-#            if t.IsOpen():
-#                if not self.pth.TournamentConflicts(t):
-#                    t.AddPlayer(self)
