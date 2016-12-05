@@ -16,6 +16,7 @@ class playerdriver:
     def DailyMaintenance(self, date):
         self.player.DailyMaintenance()
         self.ProcessInvites()
+        self.CleanOpenApplications()
         self.SearchForTournaments()
 
     def MonthlyMaintenance(self, date):
@@ -32,6 +33,14 @@ class playerdriver:
             else:
                 invite.Decline()
         self.inbox.PurgeMessages()
+
+    def CleanOpenApplications(self):
+        for app in self.open_applications:
+            if app.IsAccepted():
+                self.player.AddTournament(app.GetReceiver())
+                self.open_applications.remove(app)
+            elif app.IsDeclined():
+                self.open_applications.remove(app)
 
     def SearchForTournaments(self):
         tournament_list = self.outbox.GetAddressBook()
