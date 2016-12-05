@@ -47,6 +47,3 @@ class tournamentschedule:
 
     def GetMaxNumberRounds(self, max_players):
         pass
-
-    def GetMandatoryPlayerRange(self):
-        return False

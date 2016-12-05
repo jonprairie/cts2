@@ -31,22 +31,30 @@ class messagebushandler(pkg.pkg):
         return self.player_inbox_dict
 
     def CreatePlayerInbox(self, player):
-        temp_inbox = inbox.inbox(player)
+        temp_inbox = inbox.inbox(player, lambda: self.DestroyPlayerInbox(player))
         self.player_inbox_dict.update([(player, temp_inbox)])
         return temp_inbox
 
     def CreatePlayerOutbox(self, player):
-        temp_outbox = outbox.outbox(player, self.GetTournamentInboxDict)
+        temp_outbox = outbox.outbox(
+            player,
+            self.GetTournamentInboxDict,
+            lambda: self.DestroyPlayerOutbox(player)
+        )
         self.player_outbox_dict.update([(player, temp_outbox)])
         return temp_outbox
 
     def CreateTournamentInbox(self, tournament):
-        temp_inbox = inbox.inbox(tournament)
+        temp_inbox = inbox.inbox(tournament, lambda: self.DestroyTournamentInbox(tournament))
         self.tournament_inbox_dict.update([(tournament, temp_inbox)])
         return temp_inbox
 
     def CreateTournamentOutbox(self, tournament):
-        temp_outbox = outbox.outbox(tournament, self.GetPlayerInboxDict)
+        temp_outbox = outbox.outbox(
+            tournament,
+            self.GetPlayerInboxDict,
+            lambda: self.DestroyTournamentOutbox(tournament)
+        )
         self.tournament_outbox_dict.update([(tournament, temp_outbox)])
         return temp_outbox
 
@@ -58,3 +66,6 @@ class messagebushandler(pkg.pkg):
 
     def DestroyPlayerInbox(self, player):
         self.player_inbox_dict.pop(player, None)
+
+    def DestroyPlayerOutbox(self, player):
+        self.player_outbox_dict.pop(player, None)

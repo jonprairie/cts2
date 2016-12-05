@@ -26,6 +26,9 @@ class roundrobinschedule(tournamentschedule.tournamentschedule):
                 round.round_num = round_num + 1
                 round.round_st = round.BuildStringTable()
 
+    def GetType(self):
+        return "round_robin"
+
     def GetNumRounds(self):
         #TODO: and this one
         num_players = len(self.player_list)

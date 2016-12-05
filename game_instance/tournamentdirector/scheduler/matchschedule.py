@@ -11,6 +11,9 @@ class matchschedule(tournamentschedule.tournamentschedule):
         )
         self.first_call_to_build = True
 
+    def GetType(self):
+        return "match"
+
     def BuildRoundSchedule(self):
         if self.first_call_to_build:
             self.first_call_to_build = False
@@ -39,10 +42,3 @@ class matchschedule(tournamentschedule.tournamentschedule):
                 (first_pairing[1]+round_num)%2
             ]] for round_num in range(1,self.num_rounds+1)
         ]
-
-    def GetMandatoryPlayerRange(self):
-        return (2, 2)
-
-
-
-

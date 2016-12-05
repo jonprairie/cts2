@@ -133,15 +133,6 @@ class tournamenthandler(pkg.pkg):
     def GetTournamentList(self):
         return self.tournament_list
 
-    # def SendInvites(self, t, player_list):
-    #     random.shuffle(
-    #         player_list
-    #     )
-    #     for p in player_list:
-    #         t.SendInvite(p)
-    #         if t.InvitesFull():
-    #             break
-
     def BufferTournaments(self):
         """
         buffers tournament pool based on the default option
@@ -164,12 +155,6 @@ class tournamenthandler(pkg.pkg):
                 start_date = int(random.normalvariate(start_date_mean, 5))
                 self.api.Call("create_random_tournament_director")
                 # self.CreateTournament(start_date)
-
-    # def TestMatchInvitationals(self):
-    #     num_tournaments = int(abs(random.normalvariate(10, 5)))
-    #     for t in range(num_tournaments):
-    #         start_date = int(random.normalvariate(50, 5))
-    #         self.CreateTournament(start_date, type="match")
 
     def WeeklyMaintenance(self, date):
         self.BufferTournaments()

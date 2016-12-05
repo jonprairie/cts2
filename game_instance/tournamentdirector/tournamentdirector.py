@@ -11,14 +11,11 @@ class tournamentdirector:
                 self.recruiter.GetMaxPlayers()
             )
         )
-        if self.scheduler.GetMandatoryPlayerRange():
-            self.recruiter.SetPlayerRange(
-                self.scheduler.GetMandatoryPlayerRange()
-            )
 
     def Maintenance(self, date):
         if int(self.tournament.start_julian_date) == int(date):
             if self.recruiter.HasEnoughPlayers():
+                self.recruiter.CloseRecruiting()
                 self.scheduler.Start(self.recruiter.GetRecruits())
                 self.tournament.Start(
                     self.recruiter.GetRecruits(),

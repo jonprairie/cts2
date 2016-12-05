@@ -91,7 +91,6 @@ class player(
         return name
 
     def DailyMaintenance(self):
-        # self.ProcessTournamentInvites()
         self.pth.TransferToOld()
         self.pth.TransferToCurrent()
 

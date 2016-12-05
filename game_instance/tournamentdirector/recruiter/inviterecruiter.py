@@ -35,6 +35,9 @@ class inviterecruiter:
     def GetRecruits(self):
         return self.player_list
 
+    def CloseRecruiting(self):
+        self.outbox.close()
+
     def HasEnoughPlayers(self):
         return len(self.player_list) in range(
             self.player_range[0], self.player_range[1]+1

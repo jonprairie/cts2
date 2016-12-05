@@ -53,6 +53,7 @@ class optionhandler(pkg.pkg):
             tournament_type = "round robin",
             double_rr = False,
             round_robin_player_range = (4, 12),
+            match_player_range = (2, 2),
             swiss_player_range = (8, 100)
         )
 
